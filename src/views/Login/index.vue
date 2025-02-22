@@ -29,6 +29,8 @@ import Register from './components/Register.vue'
     min-width: 900px;
     background: rgb(126, 119, 119);
     margin: auto;
+    border-radius: 12px;
+    overflow: hidden;
 
     .describe {
       flex-basis: 50%;
