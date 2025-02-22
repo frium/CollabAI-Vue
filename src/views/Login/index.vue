@@ -1,11 +1,9 @@
 <script setup>
-import { RouterView } from 'vue-router';
-
 
 </script>
 
 <template>
-  <RouterView></RouterView>
+  登录
 </template>
 
 <style scoped lang="scss"></style>
