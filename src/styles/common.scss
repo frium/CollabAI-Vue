@@ -24,14 +24,12 @@ body {
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
-  cursor: url('/src/assets/cursor/Arrow.cur'), default !important;
   overflow-y: overlay
 }
 
 
 /* 超链接默认样式 */
 a {
-  cursor: url('/src/assets/cursor/Hand.cur'), pointer !important;
   text-decoration: none;
   color: inherit;
   outline: none;
@@ -52,10 +50,6 @@ select {
   border: none;
 }
 
-input,
-textarea {
-  cursor: url('@/assets/cursor/IBeam.cur'), auto !important;
-}
 
 input::placeholder,
 textarea::placeholder {
@@ -63,7 +57,6 @@ textarea::placeholder {
 }
 
 button {
-  cursor: url('/src/assets/cursor/Hand.cur'), pointer !important;
   background: none;
   border: none;
 }

@@ -12,7 +12,6 @@ const router = createRouter({
       component: () => import('@/views/Login/index.vue'),
       children: [
         {
-          name: "login",
           path: "",
           component: () => import('@/views/Login/components/Login.vue'),
         },

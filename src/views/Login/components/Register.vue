@@ -1,57 +1,77 @@
 <script setup>
 import { useRouter } from 'vue-router';
-import { ref } from "vue";
+import { reactive, ref } from "vue";
 import { ElMessage } from "element-plus";
+import { getCodeAPI, registerAPI, usernameUniqueCheckAPI } from '@/api/user';
+
 const router = useRouter();
-const form = ref({
+const form = reactive({
   username: "",
   password: "",
   phone: "",
-  verification: "",
+  code: "",
 });
 const formRef = ref(null);
 const rules = ref({
   username: [
     { required: true, message: "请输入用户名", trigger: ["blur", "change"] },
-    { min: 3, message: "用户名长度不能少于6位", trigger: ["blur", "change"] },
+    { pattern: /^(?!\d+$)[a-zA-Z0-9_]{2,49}$/, message: "用户名应为2-49位且不能全为数字" },
+    {
+      validator: (_, value, callback) => {
+        usernameUniqueCheckAPI(value).then(res => {
+          res.code === 200 ? callback() : callback(new Error(res.msg))
+        }).catch(() => callback());
+      },
+      trigger: 'blur'
+    }
   ],
   password: [
     { required: true, message: "请输入密码", trigger: ["blur", "change"] },
-    { min: 6, message: "密码长度不能少于6位", trigger: ["blur", "change"] },
+    { pattern: /^(?!\d+$)[a-zA-Z0-9_@#$%^&*!]{6,18}$/, message: "密码长度应在6-18位且不能全为数字" }
   ],
   phone: [
-    {
-      required: true, message: "请输入手机号", trigger: ["blur", "change"]
-    },
-    {
-      pattern: /^1[3-9]\d{9}$/, message: "请输入有效的手机号码", trigger: ["blur", "change"]
-    }
+    { required: true, message: "请输入手机号", trigger: ["blur", "change"] },
+    { pattern: /^1[3-9]\d{9}$/, message: "请输入有效的手机号码", trigger: ["blur", "change"] }
   ],
-  verification: [
-    {
-      required: true, message: "请输入验证码", trigger: ["blur", "change"]
-    },
+  code: [
+    { required: true, message: "请输入验证码", trigger: ["blur", "change"] },
   ]
 });
+const isDisabled = ref(false);
+const countdown = ref(5);
 
-const getVerification = () => {
+const getCode = () => {
   formRef.value.validateField("phone", (valid) => {
     if (!valid) return;
     console.log('获取验证码');
+    isDisabled.value = true;
+    countdown.value = 5;
+    const timer = setInterval(() => {
+      countdown.value--
+      if (countdown.value <= 0) {
+        clearInterval(timer)
+        isDisabled.value = false
+      }
+    }, 1000);
+    getCodeAPI(form.phone);
   });
 }
 
-const register = () => {
-  formRef.value.validate((valid) => {
+const register = async () => {
+  formRef.value.validate(async (valid) => {
+    console.log("提交的数据", form);
     if (valid) {
-      console.log("提交的数据", form.value);
-      ElMessage.success("密码修改成功");
-      router.push({ name: 'login' })
+      const res = await registerAPI(form);
+      console.log(res);
+      if (res.code !== 200) {
+        ElMessage.error(res.msg);
+      } else router.push({ name: 'login' })
     } else {
       ElMessage.error("请填写完整的表单信息");
     }
   });
 }
+
 </script>
 
 <template>
@@ -72,10 +92,12 @@ const register = () => {
       <el-form-item prop="phone">
         <el-input v-model="form.phone" placeholder="请输入手机号" />
       </el-form-item>
-      <el-form-item prop="verification">
-        <el-input v-model="form.verification" placeholder="请输入验证码">
+      <el-form-item prop="code">
+        <el-input v-model="form.code" placeholder="请输入验证码">
           <template #append>
-            <el-button :style="{ fontSize: '14px' }" @click="getVerification">获取验证码</el-button>
+            <el-button :style="{ fontSize: '14px' }" :disabled="isDisabled" @click="getCode">
+              {{ isDisabled ? `${countdown}s 后重试` : '获取验证码' }}
+            </el-button>
           </template>
         </el-input>
 
