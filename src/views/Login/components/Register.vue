@@ -14,7 +14,7 @@ const form = reactive({
 const formRef = ref(null);
 const rules = ref({
   username: [
-    { required: true, message: "请输入用户名", trigger: ["blur", "change"] },
+    { required: true, message: "请输入用户名", trigger: "blur" },
     { pattern: /^(?!\d+$)[a-zA-Z0-9_]{2,49}$/, message: "用户名应为2-49位且不能全为数字" },
     {
       validator: (_, value, callback) => {
@@ -26,15 +26,15 @@ const rules = ref({
     }
   ],
   password: [
-    { required: true, message: "请输入密码", trigger: ["blur", "change"] },
+    { required: true, message: "请输入密码", trigger: "blur" },
     { pattern: /^(?!\d+$)[a-zA-Z0-9_@#$%^&*!]{6,18}$/, message: "密码长度应在6-18位且不能全为数字" }
   ],
   phone: [
-    { required: true, message: "请输入手机号", trigger: ["blur", "change"] },
-    { pattern: /^1[3-9]\d{9}$/, message: "请输入有效的手机号码", trigger: ["blur", "change"] }
+    { required: true, message: "请输入手机号", trigger: "blur" },
+    { pattern: /^1[3-9]\d{9}$/, message: "请输入有效的手机号码", trigger: "blur" }
   ],
   code: [
-    { required: true, message: "请输入验证码", trigger: ["blur", "change"] },
+    { required: true, message: "请输入验证码", trigger: "blur" },
   ]
 });
 const isDisabled = ref(false);
@@ -59,10 +59,8 @@ const getCode = () => {
 
 const register = async () => {
   formRef.value.validate(async (valid) => {
-    console.log("提交的数据", form);
     if (valid) {
       const res = await registerAPI(form);
-      console.log(res);
       if (res.code !== 200) {
         ElMessage.error(res.msg);
       } else router.push({ name: 'login' })

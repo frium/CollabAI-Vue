@@ -1,8 +1,10 @@
 <script setup>
-import { ref } from "vue";
+import { onMounted, reactive, ref } from "vue";
 import { ElMessage } from "element-plus";
+import { loginAPI } from "@/api/user";
+import router from "@/router";
 
-const form = ref({
+const form = reactive({
   username: "",
   password: "",
 });
@@ -10,29 +12,49 @@ const form = ref({
 const rememberMe = ref(false);
 const rules = ref({
   username: [
-    { required: true, message: "请输入用户名", trigger: ["blur", "change"] },
-    { min: 3, message: "用户名长度不能少于6位", trigger: ["blur", "change"] },
+    { required: true, message: "请输入用户名", trigger: "blur" },
+    { pattern: /^(?!\d+$)[a-zA-Z0-9_]{2,49}$/, message: "用户名应为2-49位且不能全为数字" },
   ],
   password: [
-    { required: true, message: "请输入密码", trigger: ["blur", "change"] },
-    { min: 6, message: "密码长度不能少于6位", trigger: ["blur", "change"] },
+    { required: true, message: "请输入密码", trigger: "blur" },
+    { pattern: /^(?!\d+$)[a-zA-Z0-9_@#$%^&*!]{6,18}$/, message: "密码长度应在6-18位且不能全为数字" }
   ],
 });
 
 const formRef = ref(null);
 
 const login = () => {
-  formRef.value.validate((valid) => {
+  formRef.value.validate(async (valid) => {
     if (valid) {
-      console.log("提交的数据", form.value);
-      //将账号密码存入local store
+      const res = await loginAPI(form);
+      if (res.data !== 200) {
+        ElMessage.error(res.msg);
+        return;
+      }
       ElMessage.success("登录成功");
-
+      if (rememberMe.value) {
+        const userLoginInfo = {
+          username: form.username,
+          password: form.password
+        }
+        localStorage.setItem('userLoginInfo', JSON.stringify(userLoginInfo));
+      } else {
+        localStorage.removeItem('userLoginInfo');
+      };
+      router.push({ name: 'home' })
     } else {
       ElMessage.error("请填写完整的表单信息");
     }
   });
 };
+
+onMounted(() => {
+  const userLoginInfo = JSON.parse(localStorage.getItem('userLoginInfo'));
+  if (!userLoginInfo) return;
+  form.username = userLoginInfo.username;
+  form.password = userLoginInfo.password;
+  rememberMe.value = true;
+})
 </script>
 
 <template>
