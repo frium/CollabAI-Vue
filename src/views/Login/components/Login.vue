@@ -27,11 +27,12 @@ const login = () => {
   formRef.value.validate(async (valid) => {
     if (valid) {
       const res = await loginAPI(form);
-      if (res.data !== 200) {
+      if (res.code !== 200) {
         ElMessage.error(res.msg);
         return;
       }
       ElMessage.success("登录成功");
+      localStorage.setItem('jwt', res.data.jwt)
       if (rememberMe.value) {
         const userLoginInfo = {
           username: form.username,
@@ -44,7 +45,8 @@ const login = () => {
       router.push({ name: 'home' })
     } else {
       ElMessage.error("请填写完整的表单信息");
-    }
+    };
+
   });
 };
 
@@ -62,7 +64,7 @@ onMounted(() => {
     <el-form ref="formRef" class="form" :model="form" :rules="rules" label-width="auto">
       <el-form-item class="title">
         <h2>登录</h2>
-        <RouterLink to="/register" :style="{ color: 'rgb(145, 192, 233)' }">没有账号? 点击注册</RouterLink>
+        <RouterLink to="/login/register" :style="{ color: 'rgb(145, 192, 233)' }">没有账号? 点击注册</RouterLink>
       </el-form-item>
 
       <el-form-item prop="username">
@@ -77,7 +79,7 @@ onMounted(() => {
         <el-checkbox v-model="rememberMe" :style="{ marginRight: 'auto' }">
           记住我
         </el-checkbox>
-        <RouterLink to="/password" :style="{ color: 'rgb(145, 192, 233)' }">忘记密码?</RouterLink>
+        <RouterLink to="/login/password" :style="{ color: 'rgb(145, 192, 233)' }">忘记密码?</RouterLink>
       </el-form-item>
 
       <el-form-item>

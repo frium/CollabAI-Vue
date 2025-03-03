@@ -32,3 +32,25 @@ export const getCodeAPI = (username) => {
     params: { username }
   })
 }
+export const changeUserInfoAPI = (data) => {
+  return request({
+    url: '/user/info',
+    method: 'PUT',
+    data
+  })
+}
+export const getUserInfoAPI = () => {
+  return request({
+    url: '/user/me'
+  })
+}
+export const uploadAvatarAPI = (avatar) => {
+  return request({
+    url: '/user/avatar/upload',
+    method: 'POST',
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    },
+    data: avatar
+  })
+}

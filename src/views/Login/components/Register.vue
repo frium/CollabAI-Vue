@@ -63,7 +63,10 @@ const register = async () => {
       const res = await registerAPI(form);
       if (res.code !== 200) {
         ElMessage.error(res.msg);
-      } else router.push({ name: 'login' })
+      } else {
+        ElMessage.success('注册成功!');
+        router.push({ name: 'login' })
+      }
     } else {
       ElMessage.error("请填写完整的表单信息");
     }

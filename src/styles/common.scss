@@ -3,6 +3,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-size: 14px;
 }
 
 
@@ -16,14 +17,8 @@ body {
   width: 100%;
   font-size: 16px;
   line-height: 1.5;
-  background-color: #fff;
+  background-color: #F7F9FC;
   color: #000000;
-  background:
-    linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
-    url('https://blog.frium.top/upload/flowes.jpg') no-repeat;
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
   overflow-y: overlay
 }
 
@@ -37,7 +32,7 @@ a {
 }
 
 a:hover {
-  color: #f6cac9;
+  color: #72bedf;
 }
 
 /* 表单元素 */
@@ -89,4 +84,11 @@ img {
 
 i {
   font-style: normal;
+}
+
+
+.container {
+  width: 1400px;
+  margin: 0 auto;
+  position: relative;
 }

@@ -4,21 +4,30 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      name: 'home',
-      path: '/home',
-      component: () => import('@/views/Home/index.vue')
+      path: '/',
+      component: () => import('@/views/Home/index.vue'),
+      children: [
+        {
+          path: ""
+        },
+        {
+          name: 'home',
+          path: 'home'
+        },
+        {
+          name: 'personalCenter',
+          path: 'personalCenter',
+          component: () => import('@/views/PersonalCenter/index.vue')
+        }
+      ]
     },
     {
-      path: '/',
+      path: '/login',
       component: () => import('@/views/Login/index.vue'),
       children: [
         {
+          name: 'login',
           path: "",
-          component: () => import('@/views/Login/components/Login.vue'),
-        },
-        {
-          name: "login",
-          path: "login",
           component: () => import('@/views/Login/components/Login.vue'),
         },
         {
