@@ -64,28 +64,15 @@ const changeAvatar = () => {
     //   alert(validation.message);
     //   return;
     // } 验证图片函数
+    const formData = new FormData();
+    formData.append('file', file);
+    const avatarRes = await uploadAvatarAPI(formData);
+    console.log(avatarRes);
+    userInfo.avatar = avatarRes.data.url;
+    const infoRes = await changeUserInfoAPI(userInfo);
+    console.log(infoRes)
+    ElMessage.success('修改成功!');
 
-    try {
-      const formData = new FormData();
-      formData.append('file', file);
-      const avatarRes = await uploadAvatarAPI(formData);
-      console.log(avatarRes);
-      if (avatarRes.code !== 200) {
-        ElMessage.error('修改失败!');
-        return;
-      }
-      userInfo.avatar = avatarRes.data.url;
-      const infoRes = await changeUserInfoAPI(userInfo);
-      console.log(infoRes);
-
-      if (infoRes.code !== 200) {
-        ElMessage.error('修改失败!');
-        return;
-      }
-      ElMessage.success('修改成功!');
-    } catch (error) {
-      ElMessage.error('头像更新失败，请重试');
-    }
   };
 
   document.body.appendChild(input);
@@ -148,15 +135,7 @@ const editInfo = (event) => {
 };
 
 const updateUsername = async (event) => {
-  const res = await updateUsernameAPI(userInfo.username);
-  if (res.code === 40005) {
-    ElNotification({
-      title: 'Error',
-      message: res.msg,
-      type: 'error'
-    });
-    return;
-  }
+  await updateUsernameAPI(userInfo.username);
   ElNotification({
     title: 'Success',
     message: '修改成功',
@@ -197,15 +176,16 @@ const getPhoneCode = () => {
 
 const updatePhone = async (event) => {
   phoneData.phone = userInfo.phone;
-  const res = await updatePhoneAPI(phoneData);
-  if (res.code === 40010) {
+  if (phoneData.code.length < 6) {
     ElNotification({
       title: 'Error',
-      message: res.msg,
+      message: '手机验证码长度有误',
       type: 'error'
     });
     return;
   }
+  await updatePhoneAPI(phoneData);
+  phoneData.code = '';
   ElNotification({
     title: 'Success',
     message: '修改成功',
@@ -237,15 +217,16 @@ const getEmailCode = () => {
 }
 const updateEmail = async (event) => {
   emailData.email = userInfo.email;
-  const res = await updateEmailAPI(emailData);
-  if (res.code === 40010) {
+  if (emailData.code.length < 6) {
     ElNotification({
       title: 'Error',
-      message: res.msg,
+      message: '邮箱验证码长度有误',
       type: 'error'
     });
     return;
   }
+  await updateEmailAPI(emailData);
+  emailData.data = '';
   ElNotification({
     title: 'Success',
     message: '修改成功',

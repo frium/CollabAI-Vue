@@ -27,10 +27,6 @@ const login = () => {
   formRef.value.validate(async (valid) => {
     if (valid) {
       const res = await loginAPI(form);
-      if (res.code !== 200) {
-        ElMessage.error(res.msg);
-        return;
-      }
       ElMessage.success("登录成功");
       localStorage.setItem('jwt', res.data.jwt)
       if (rememberMe.value) {

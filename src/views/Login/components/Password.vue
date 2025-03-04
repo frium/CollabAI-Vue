@@ -23,6 +23,8 @@ const rules = ref({
     { required: true, message: "请输入验证码", trigger: "blur" },
   ]
 });
+const isDisabled = ref(false);
+const countdown = ref(5);
 
 const getCode = () => {
   formRef.value.validateField("phone", (valid) => {
@@ -44,10 +46,9 @@ const getCode = () => {
 const submit = () => {
   formRef.value.validate(async (valid) => {
     if (valid) {
-      const res = await forgotPasswordAPI(form);
-      if (res.code !== 200) {
-        ElMessage.error(res.msg);
-      } else router.push({ name: 'login' })
+      await forgotPasswordAPI(form);
+      router.push({ name: 'login' })
+      ElMessage.success("修改成功");
     } else {
       ElMessage.error("请填写完整的表单信息");
     }
@@ -72,7 +73,9 @@ const submit = () => {
       <el-form-item prop="code">
         <el-input v-model="form.code" placeholder="请输入验证码">
           <template #append>
-            <el-button :style="{ fontSize: '14px' }" @click="getCode">获取验证码</el-button>
+            <el-button :style="{ fontSize: '14px' }" :disabled="isDisabled" @click="getCode">
+              {{ isDisabled ? `${countdown}s 后重试` : '获取验证码' }}
+            </el-button>
           </template>
         </el-input>
 

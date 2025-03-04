@@ -58,19 +58,16 @@ const getCode = () => {
 }
 
 const register = async () => {
-  formRef.value.validate(async (valid) => {
-    if (valid) {
-      const res = await registerAPI(form);
-      if (res.code !== 200) {
-        ElMessage.error(res.msg);
-      } else {
-        ElMessage.success('注册成功!');
-        router.push({ name: 'login' })
-      }
-    } else {
-      ElMessage.error("请填写完整的表单信息");
-    }
-  });
+  const valid = await formRef.value.validate();
+  console.log(valid);
+
+  if (valid) {
+    await registerAPI(form);
+    ElMessage.success('注册成功!');
+    router.push({ name: 'login' });
+  } else {
+    ElMessage.error("请填写完整的表单信息");
+  }
 }
 
 </script>
