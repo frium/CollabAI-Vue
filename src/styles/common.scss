@@ -3,7 +3,6 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-size: 14px;
 }
 
 /* HTML & Body 基础设置 */
@@ -66,6 +65,11 @@ button:disabled {
 ul,
 ol {
   list-style: none;
+}
+
+p,
+span {
+  font-size: 14px;
 }
 
 /* 图片 */

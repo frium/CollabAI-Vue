@@ -18,6 +18,11 @@ const router = createRouter({
           name: 'personalCenter',
           path: 'personalCenter',
           component: () => import('@/views/PersonalCenter/index.vue')
+        },
+        {
+          name: 'conference',
+          path: 'joinConference/:conferenceId',
+          component: () => import('@/views/Conference/components/ConferenceCard.vue')
         }
       ]
     },
