@@ -4,7 +4,13 @@ import LayoutNav from '../../components/LayoutNav.vue';
 
 <template>
   <LayoutNav></LayoutNav>
-  <router-view></router-view>
+  <div class="home-router-view">
+    <router-view></router-view>
+  </div>
 </template>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.home-router-view {
+  margin-top: 15px;
+}
+</style>

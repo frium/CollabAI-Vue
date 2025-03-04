@@ -44,6 +44,27 @@ export const getUserInfoAPI = () => {
     url: '/user/me'
   })
 }
+export const updateUsernameAPI = (username) => {
+  return request({
+    url: '/user/username',
+    method: 'PUT',
+    data: { username }
+  })
+}
+export const updatePhoneAPI = (data) => {
+  return request({
+    url: '/user/phone',
+    method: 'PUT',
+    data: data
+  })
+}
+export const updateEmailAPI = (data) => {
+  return request({
+    url: '/user/email',
+    method: 'PUT',
+    data: data
+  })
+}
 export const uploadAvatarAPI = (avatar) => {
   return request({
     url: '/user/avatar/upload',
@@ -54,3 +75,5 @@ export const uploadAvatarAPI = (avatar) => {
     data: avatar
   })
 }
+
+

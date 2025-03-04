@@ -6,10 +6,6 @@
   font-size: 14px;
 }
 
-
-
-
-
 /* HTML & Body 基础设置 */
 html,
 body {
@@ -19,9 +15,13 @@ body {
   line-height: 1.5;
   background-color: #F7F9FC;
   color: #000000;
-  overflow-y: overlay
+  overflow-y: overlay;
+  letter-spacing: 0.5px;
 }
 
+body {
+  font-family: 'Roboto', sans-serif;
+}
 
 /* 超链接默认样式 */
 a {
@@ -54,6 +54,7 @@ textarea::placeholder {
 button {
   background: none;
   border: none;
+  cursor: pointer;
 }
 
 button:disabled {
