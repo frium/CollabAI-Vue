@@ -1,11 +1,10 @@
 import axios from "axios";
 import { ElNotification } from 'element-plus';
-
+import router from "@/router";
 const request = axios.create({
   baseURL: '/api',
 })
 
-//拦截器
 request.interceptors.request.use(config => {
   if (!config.noAuth) {
     const token = localStorage.getItem('jwt');
@@ -20,22 +19,22 @@ request.interceptors.response.use(
       return res.data;
     }
     if (res.data.code !== 200) {
-      const errorMsg = res.data.msg || '请求异常，请稍后重试'
-      ElNotification({
-        title: 'Error',
-        message: errorMsg,
-        type: 'error'
-      });
-
       if (res.data.code === 401) {
-        router.push({ name: 'login' });
         ElNotification({
           title: 'Warning',
           message: '用户身份过期,请重新登录!',
           type: 'warning',
           zIndex: 10000
         });
+        router.push({ name: "login" });
+        return Promise.reject(null);
       }
+      const errorMsg = res.data.msg || '请求异常，请稍后重试'
+      ElNotification({
+        title: 'Error',
+        message: errorMsg,
+        type: 'error'
+      });
       return Promise.reject(null);
     }
 
@@ -44,6 +43,16 @@ request.interceptors.response.use(
   },
   error => {
     console.error(error);
+    if (error.response?.status === 401) {
+      ElNotification({
+        title: 'Warning',
+        message: '用户身份过期,请重新登录!',
+        type: 'warning',
+        zIndex: 10000
+      });
+      router.push({ name: "login" });
+      return Promise.reject(error);
+    }
 
     const errorMsg = error.response?.data?.msg || '请求失败，请检查网络';
     ElNotification({
@@ -51,16 +60,6 @@ request.interceptors.response.use(
       message: errorMsg,
       type: 'error'
     });
-
-    if (error.response?.status === 401) {
-      router.push({ name: 'login' });
-      ElNotification({
-        title: 'Warning',
-        message: '用户身份过期,请重新登录!',
-        type: 'warning',
-        zIndex: 10000
-      });
-    }
 
     return Promise.reject(error);
   })

@@ -5,12 +5,12 @@ import HeadInfo from './components/HeadInfo.vue';
 import { ElMessage } from "element-plus";
 import { ref } from 'vue';
 import { useRoute } from 'vue-router';
-import { useConferenceStore } from '@/stores/conference';
+import { useConferenceStore } from '@/stores/conferenceStore';
 
 const route = useRoute();
 const conferenceStore = useConferenceStore();
 
-conferenceStore.getConferenceInfo();
+conferenceStore.getShareConferenceInfo();
 
 const joinConference = async () => {
   await joinConferenceAPI(route.params.conferenceId);

@@ -1,5 +1,5 @@
 <script setup>
-import LayoutNav from '../../components/LayoutNav.vue';
+import LayoutNav from './components/LayoutNav.vue';
 </script>
 
 <template>

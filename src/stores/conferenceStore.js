@@ -20,7 +20,7 @@ export const useConferenceStore = defineStore('conference', () => {
     "createTime": ""
   });
   const correctConferenceId = ref(false);
-  const getConferenceInfo = async () => {
+  const getShareConferenceInfo = async () => {
     const route = useRoute();
     const conferenceId = route.params.conferenceId;
     if (!conferenceId) return;
@@ -31,7 +31,7 @@ export const useConferenceStore = defineStore('conference', () => {
 
   return {
     conferenceInfo,
-    getConferenceInfo,
+    getShareConferenceInfo,
     correctConferenceId
   }
 })

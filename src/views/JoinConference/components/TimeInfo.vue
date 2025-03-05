@@ -1,6 +1,6 @@
 <script setup>
 import { computed } from "vue";
-import { useConferenceStore } from '@/stores/conference';
+import { useConferenceStore } from '@/stores/conferenceStore';
 import { ElMessage } from "element-plus";
 const copyId = () => {
   navigator.clipboard.writeText(conferenceInfo.id)

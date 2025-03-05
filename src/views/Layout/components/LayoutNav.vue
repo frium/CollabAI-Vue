@@ -21,9 +21,9 @@ import PersonalCard from '@/views/PersonalCenter/components/PersonalCard.vue';
 <style scoped lang="scss">
 .home-layout-nav {
   min-width: 1000px;
-  height: 55px;
+  height: 50px;
   padding: 10px 40px;
-  background-color: cadetblue;
+  background-color: #78aff7;
 
   .home-layout-nav-ul {
     display: flex;

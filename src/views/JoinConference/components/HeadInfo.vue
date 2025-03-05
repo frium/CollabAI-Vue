@@ -1,5 +1,5 @@
 <script setup>
-import { useConferenceStore } from '@/stores/conference';
+import { useConferenceStore } from '@/stores/conferenceStore';
 import TimeInfo from './TimeInfo.vue';
 
 const conferenceStore = useConferenceStore();
