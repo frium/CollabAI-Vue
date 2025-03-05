@@ -22,7 +22,7 @@ const router = createRouter({
         {
           name: 'conference',
           path: 'joinConference/:conferenceId',
-          component: () => import('@/views/Conference/components/ConferenceCard.vue')
+          component: () => import('@/views/JoinConference/index.vue')
         }
       ]
     },

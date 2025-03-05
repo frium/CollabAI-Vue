@@ -4,3 +4,12 @@ export const getConferenceInfoAPI = (conferenceId) => {
     url: `/mt/${conferenceId}`,
   });
 };
+
+
+export const joinConferenceAPI = (conferenceId) => {
+  return request({
+    url: `/mt/join/${conferenceId}`,
+    method: 'POST',
+  });
+};
+
