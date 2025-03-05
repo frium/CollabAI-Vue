@@ -29,7 +29,6 @@ const countdown = ref(5);
 const getCode = () => {
   formRef.value.validateField("phone", (valid) => {
     if (!valid) return;
-    console.log('获取验证码');
     isDisabled.value = true;
     countdown.value = 5;
     const timer = setInterval(() => {

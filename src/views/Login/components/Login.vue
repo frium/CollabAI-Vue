@@ -73,7 +73,7 @@ onMounted(() => {
         <el-checkbox v-model="rememberMe" :style="{ marginRight: 'auto' }">
           记住我
         </el-checkbox>
-        <RouterLink :o="{ name: 'password' }" :style="{ color: 'rgb(145, 192, 233)' }">忘记密码?</RouterLink>
+        <RouterLink :to="{ name: 'password' }" :style="{ color: 'rgb(145, 192, 233)' }">忘记密码?</RouterLink>
       </el-form-item>
 
       <el-form-item>

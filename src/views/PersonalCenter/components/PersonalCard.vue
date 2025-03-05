@@ -1,23 +1,31 @@
 <script setup>
 import { useRouter } from 'vue-router';
 import { ElMessage } from "element-plus";
+import { getUserInfoAPI } from '@/api/user';
+import { onMounted } from 'vue';
+import { useUserStore } from '@/stores/userStore';
 
 const router = useRouter();
-const jwt = localStorage.getItem('jwt')
+const jwt = localStorage.getItem('jwt');
+const userStore = useUserStore();
 const logout = () => {
   localStorage.removeItem('jwt');
   router.push({ name: 'login' });
   ElMessage.success("已退出账号")
 }
-
+onMounted(async () => {
+  const res = await getUserInfoAPI();
+  Object.assign(userStore.userInfo, res.data);
+  return;
+})
 </script>
 
 <template>
 
   <div v-if="jwt" class="personal-card">
-    <span>常常的鱼</span>
+    <span>{{ userStore.userInfo.nickname }}</span>
     <el-dropdown placement="bottom" class="el-dropdown-bottom">
-      <img src="https://blog.frium.top/upload/%E6%B5%81%E8%90%A4.jpg" alt="">
+      <img :src="userStore.userInfo.avatar" alt="">
       <template #dropdown>
         <el-dropdown-menu>
           <el-dropdown-item>
@@ -41,12 +49,25 @@ const logout = () => {
   align-items: center;
   font-size: 14px;
 
-  .el-dropdown-bottom {
+
+  span {
+    width: 80px;
+    display: -webkit-box;
+    white-space: nowrap;
+    word-break: break-all;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: center;
     margin-left: 10px;
+  }
+
+  .el-dropdown-bottom {
 
     img {
-      width: 30px;
-      height: 30px;
+      width: 40px;
+      height: 40px;
       border-radius: 50%;
     }
   }
