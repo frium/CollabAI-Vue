@@ -6,11 +6,10 @@ import PersonalCard from '@/views/PersonalCenter/components/PersonalCard.vue';
   <div class="home-layout-nav">
     <ul class="home-layout-nav-ul">
       <li>
-        <RouterLink class="join-conference-button">加入会议</RouterLink>
+        <RouterLink :to="{ name: 'joinConference' }" class="join-conference-button">加入会议</RouterLink>
       </li>
       <li>
-        <RouterLink class="reserve-conference-button">预定会议</RouterLink>
-
+        <RouterLink to="/" class="reserve-conference-button">预定会议</RouterLink>
       </li>
       <li>
         <PersonalCard></PersonalCard>

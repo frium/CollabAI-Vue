@@ -20,8 +20,8 @@ const router = createRouter({
           component: () => import('@/views/PersonalCenter/index.vue')
         },
         {
-          name: 'conference',
-          path: 'joinConference/:conferenceId',
+          name: 'joinConference',
+          path: 'joinConference/:conferenceId?',
           component: () => import('@/views/JoinConference/index.vue')
         }
       ]

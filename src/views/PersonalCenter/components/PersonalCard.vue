@@ -1,5 +1,14 @@
 <script setup>
+import { useRouter } from 'vue-router';
+import { ElMessage } from "element-plus";
 
+
+const router = useRouter();
+const logout = () => {
+  localStorage.removeItem('jwt');
+  router.push({ name: 'login' });
+  ElMessage.success("已退出账号")
+}
 </script>
 
 <template>
@@ -11,10 +20,10 @@
       <template #dropdown>
         <el-dropdown-menu>
           <el-dropdown-item>
-            <RouterLink to="/personalCenter">个人主页</RouterLink>
+            <RouterLink :to="{ name: 'personalCenter' }">个人主页</RouterLink>
           </el-dropdown-item>
           <el-dropdown-item>
-            <RouterLink>退出登录</RouterLink>
+            <button @click="logout">退出登录</button>
           </el-dropdown-item>
         </el-dropdown-menu>
       </template>

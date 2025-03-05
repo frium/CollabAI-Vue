@@ -43,7 +43,6 @@ const countdown = ref(5);
 const getCode = () => {
   formRef.value.validateField("phone", (valid) => {
     if (!valid) return;
-    console.log('获取验证码');
     isDisabled.value = true;
     countdown.value = 5;
     const timer = setInterval(() => {
@@ -59,8 +58,6 @@ const getCode = () => {
 
 const register = async () => {
   const valid = await formRef.value.validate();
-  console.log(valid);
-
   if (valid) {
     await registerAPI(form);
     ElMessage.success('注册成功!');
@@ -77,7 +74,7 @@ const register = async () => {
     <el-form ref="formRef" class="form" :model="form" :rules="rules" label-width="auto">
       <el-form-item class="title">
         <h2>注册</h2>
-        <RouterLink to="/login" :style="{ color: 'rgb(145, 192, 233)' }">已有账号? 点击登录</RouterLink>
+        <RouterLink :to="{ name: 'login' }" :style="{ color: 'rgb(145, 192, 233)' }">已有账号? 点击登录</RouterLink>
       </el-form-item>
 
       <el-form-item prop="username">

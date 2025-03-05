@@ -61,7 +61,7 @@ const submit = () => {
     <el-form ref="formRef" class="form" :model="form" :rules="rules" label-width="auto">
       <el-form-item class="title">
         <h2>忘记密码</h2>
-        <RouterLink to="/login" :style="{ color: 'rgb(145, 192, 233)' }">已有账号? 点击登录</RouterLink>
+        <RouterLink :to="{ name: 'login' }" :style="{ color: 'rgb(145, 192, 233)' }">已有账号? 点击登录</RouterLink>
       </el-form-item>
       <el-form-item prop="phone">
         <el-input v-model="form.phone" placeholder="请输入手机号" />

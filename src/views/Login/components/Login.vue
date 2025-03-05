@@ -8,7 +8,6 @@ const form = reactive({
   username: "",
   password: "",
 });
-
 const rememberMe = ref(false);
 const rules = ref({
   username: [
@@ -23,27 +22,26 @@ const rules = ref({
 
 const formRef = ref(null);
 
-const login = () => {
-  formRef.value.validate(async (valid) => {
-    if (valid) {
-      const res = await loginAPI(form);
-      ElMessage.success("登录成功");
-      localStorage.setItem('jwt', res.data.jwt)
-      if (rememberMe.value) {
-        const userLoginInfo = {
-          username: form.username,
-          password: form.password
-        }
-        localStorage.setItem('userLoginInfo', JSON.stringify(userLoginInfo));
-      } else {
-        localStorage.removeItem('userLoginInfo');
-      };
-      router.push({ name: 'home' })
+const login = async () => {
+  const valid = await formRef.value.validate();
+  if (valid) {
+    const res = await loginAPI(form);
+    ElMessage.success("登录成功");
+    localStorage.setItem('jwt', res.data.jwt)
+    if (rememberMe.value) {
+      const userLoginInfo = {
+        username: form.username,
+        password: form.password
+      }
+      localStorage.setItem('userLoginInfo', JSON.stringify(userLoginInfo));
     } else {
-      ElMessage.error("请填写完整的表单信息");
+      localStorage.removeItem('userLoginInfo');
     };
+    router.push({ name: 'home' })
+  } else {
+    ElMessage.error("请填写完整的表单信息");
+  };
 
-  });
 };
 
 onMounted(() => {
@@ -60,7 +58,7 @@ onMounted(() => {
     <el-form ref="formRef" class="form" :model="form" :rules="rules" label-width="auto">
       <el-form-item class="title">
         <h2>登录</h2>
-        <RouterLink to="/login/register" :style="{ color: 'rgb(145, 192, 233)' }">没有账号? 点击注册</RouterLink>
+        <RouterLink :to="{ name: 'register' }" :style="{ color: 'rgb(145, 192, 233)' }">没有账号? 点击注册</RouterLink>
       </el-form-item>
 
       <el-form-item prop="username">
@@ -75,7 +73,7 @@ onMounted(() => {
         <el-checkbox v-model="rememberMe" :style="{ marginRight: 'auto' }">
           记住我
         </el-checkbox>
-        <RouterLink to="/login/password" :style="{ color: 'rgb(145, 192, 233)' }">忘记密码?</RouterLink>
+        <RouterLink :o="{ name: 'password' }" :style="{ color: 'rgb(145, 192, 233)' }">忘记密码?</RouterLink>
       </el-form-item>
 
       <el-form-item>

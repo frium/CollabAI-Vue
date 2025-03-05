@@ -250,7 +250,7 @@ const updateEmail = async (event) => {
         </div>
         <div class="right">
           <span class="name">{{ userInfo.nickname }}</span>
-          <RouterLink to="/home" class="all-conference">查看所有会议</RouterLink>
+          <RouterLink :to="{ name: home }" class="all-conference">查看所有会议</RouterLink>
         </div>
       </div>
       <div class="basic-information">
