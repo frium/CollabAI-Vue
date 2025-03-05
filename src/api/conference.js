@@ -4,6 +4,11 @@ export const getConferenceInfoAPI = (conferenceId) => {
     url: `/mt/${conferenceId}`,
   });
 };
+export const getShareConferenceInfoAPI = (conferenceId) => {
+  return request({
+    url: `/mt/share/${conferenceId}`,
+  });
+};
 
 
 export const joinConferenceAPI = (conferenceId) => {

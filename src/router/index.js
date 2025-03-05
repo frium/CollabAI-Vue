@@ -5,14 +5,16 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      component: () => import('@/views/Home/index.vue'),
+      component: () => import('@/views/Layout/index.vue'),
       children: [
         {
-          path: ""
+          path: "",
+          redirect: { name: 'home' }
         },
         {
           name: 'home',
-          path: 'home'
+          path: 'home',
+          component: () => import('@/views/Home/index.vue'),
         },
         {
           name: 'personalCenter',
