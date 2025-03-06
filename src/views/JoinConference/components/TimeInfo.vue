@@ -1,7 +1,7 @@
 <script setup>
-import { computed } from "vue";
 import { useConferenceStore } from '@/stores/conferenceStore';
 import { ElMessage } from "element-plus";
+import { formatConferenceTimeAPI } from '@/api/time'
 const copyId = () => {
   navigator.clipboard.writeText(conferenceInfo.id)
   ElMessage.success('已复制会议ID')
@@ -10,48 +10,9 @@ const copyId = () => {
 const conferenceStore = useConferenceStore();
 const conferenceInfo = conferenceStore.conferenceInfo;
 
-const formattedDate = computed(() => {
-  const startDate = new Date(conferenceInfo.startTime);
-  const startYear = startDate.getFullYear();
-  const startMonth = String(startDate.getMonth() + 1).padStart(2, '0');
-  const startDay = String(startDate.getDate()).padStart(2, '0');
-  const startHours = String(startDate.getHours()).padStart(2, '0');
-  const startMinutes = String(startDate.getMinutes()).padStart(2, '0');
+const formattedDate = formatConferenceTimeAPI(conferenceInfo.startTime, conferenceInfo.endTime);
+console.log(formattedDate);
 
-  const endDate = new Date(conferenceInfo.endTime);
-  const endYear = endDate.getFullYear();
-  const endMonth = String(endDate.getMonth() + 1).padStart(2, '0');
-  const endDay = String(endDate.getDate()).padStart(2, '0');
-  const endHours = String(endDate.getHours()).padStart(2, '0');
-  const endMinutes = String(endDate.getMinutes()).padStart(2, '0');
-
-  const timeDiffInMs = endDate - startDate;
-  const hoursDiff = Math.floor(timeDiffInMs / (1000 * 60 * 60)); // 小时差
-  const minutesDiff = Math.floor((timeDiffInMs % (1000 * 60 * 60)) / (1000 * 60)); // 分钟差
-
-  let lastTime = "";
-  if (hoursDiff) lastTime += hoursDiff + '小时'
-  if (minutesDiff) lastTime += minutesDiff + '分'
-
-  let status = "";
-  const currentTime = new Date();
-  if (currentTime >= startDate && currentTime <= endDate) {
-    status = "进行中"
-  } else if (currentTime >= endDate) {
-    status = "已结束"
-  } else {
-    status = "未开始"
-  }
-
-  return {
-    startDate: `${startYear}年${startMonth}月${startDay}日`,
-    startTime: `${startHours}:${startMinutes}`,
-    endDate: `${endYear}年${endMonth}月${endDay}日`,
-    endTime: `${endHours}:${endMinutes}`,
-    lastTime: lastTime,
-    status: status,
-  };
-});
 </script>
 
 <template>

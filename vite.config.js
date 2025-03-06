@@ -16,6 +16,8 @@ export default defineConfig({
     },
   },
   server: {
+    host: '0.0.0.0',
+    port: 80,
     proxy: {
       '/api': {
         target: 'http://frium.top:7654',

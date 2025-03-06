@@ -17,4 +17,11 @@ export const joinConferenceAPI = (conferenceId) => {
     method: 'POST',
   });
 };
+export const getMyConferenceAPI = () => {
+  return request({
+    url: `/mt/list`,
+  });
+};
+
+
 
