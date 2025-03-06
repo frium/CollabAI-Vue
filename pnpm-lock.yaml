@@ -38,15 +38,6 @@ importers:
       qrcode.vue:
         specifier: ^3.6.0
         version: 3.6.0(vue@3.5.13)
-      quill:
-        specifier: ^2.0.3
-        version: 2.0.3
-      quill-image-resize-custom-module:
-        specifier: ^4.1.7
-        version: 4.1.7
-      quill-image-uploader:
-        specifier: ^1.3.0
-        version: 1.3.0(quill@2.0.3)
       vue:
         specifier: ^3.5.13
         version: 3.5.13
@@ -55,13 +46,13 @@ importers:
         version: 4.5.0(vue@3.5.13)
     devDependencies:
       '@eslint/js':
-        specifier: ^9.20.0
+        specifier: ^9.21.0
         version: 9.21.0
       '@vitejs/plugin-vue':
         specifier: ^5.2.1
         version: 5.2.1(vite@6.1.1(sass-embedded@1.85.0))(vue@3.5.13)
       eslint:
-        specifier: ^9.20.1
+        specifier: ^9.21.0
         version: 9.21.0
       eslint-plugin-vue:
         specifier: ^9.32.0
@@ -70,7 +61,7 @@ importers:
         specifier: ^1.85.0
         version: 1.85.0
       vite:
-        specifier: ^6.1.0
+        specifier: ^6.1.1
         version: 6.1.1(sass-embedded@1.85.0)
       vite-plugin-vue-devtools:
         specifier: ^7.7.2
@@ -1112,9 +1103,6 @@ packages:
   eventemitter3@2.0.3:
     resolution: {integrity: sha512-jLN68Dx5kyFHaePoXWPsCGW5qdyZQtLYHkxkg02/Mz6g0kYpDx4FyP6XfArhQdlOC4b8Mv+EMxPo/8La7Tzghg==, tarball: https://registry.npmmirror.com/eventemitter3/-/eventemitter3-2.0.3.tgz}
 
-  eventemitter3@5.0.1:
-    resolution: {integrity: sha512-GWkBvjiSZK87ELrYOSESUYeVIc9mvLLf/nXalMOS5dYrgZq9o5OVkbZAVM06CVxYsCwH9BDZFPlQTlPA1j4ahA==, tarball: https://registry.npmmirror.com/eventemitter3/-/eventemitter3-5.0.1.tgz}
-
   execa@9.5.2:
     resolution: {integrity: sha512-EHlpxMCpHWSAh1dgS6bVeoLAXGnJNdR93aabr4QCGbzOM73o5XmRfM/e5FUqsw3aagP8S8XEWUWFAxnRBnAF0Q==, tarball: https://registry.npmmirror.com/execa/-/execa-9.5.2.tgz}
     engines: {node: ^18.19.0 || >=20.5.0}
@@ -1133,9 +1121,6 @@ packages:
 
   fast-diff@1.2.0:
     resolution: {integrity: sha512-xJuoT5+L99XlZ8twedaRf6Ax2TgQVxvgZOYoPKqZufmJib0tL2tegPBOZb1pVNgIhlqDlA0eO0c3wBvQcmzx4w==, tarball: https://registry.npmmirror.com/fast-diff/-/fast-diff-1.2.0.tgz}
-
-  fast-diff@1.3.0:
-    resolution: {integrity: sha512-VxPP4NqbUjj6MaAOafWeUn2cXWLcCtljklUtZf0Ind4XQ+QPtmA0b18zZy0jIQx+ExRVCR/ZQpBmik5lXshNsw==, tarball: https://registry.npmmirror.com/fast-diff/-/fast-diff-1.3.0.tgz}
 
   fast-json-stable-stringify@2.1.0:
     resolution: {integrity: sha512-lhd/wF+Lk98HZoTCtlVraHtfh5XYijIjalXck7saUtuanSDyLMxnHhSXEDJqHxD7msR8D0uCmqlkwjCV8xvwHw==, tarball: https://registry.npmmirror.com/fast-json-stable-stringify/-/fast-json-stable-stringify-2.1.0.tgz}
@@ -1527,9 +1512,6 @@ packages:
   parchment@1.1.4:
     resolution: {integrity: sha512-J5FBQt/pM2inLzg4hEWmzQx/8h8D0CiDxaG3vyp9rKrQRSDgBlhjdP5jQGgosEajXPSQouXGHOmVdgo7QmJuOg==, tarball: https://registry.npmmirror.com/parchment/-/parchment-1.1.4.tgz}
 
-  parchment@3.0.0:
-    resolution: {integrity: sha512-HUrJFQ/StvgmXRcQ1ftY6VEZUq3jA2t9ncFN4F84J/vN0/FPpQF+8FKXb3l6fLces6q0uOHj6NJn+2xvZnxO6A==, tarball: https://registry.npmmirror.com/parchment/-/parchment-3.0.0.tgz}
-
   parent-module@1.0.1:
     resolution: {integrity: sha512-GQ2EWRpQV8/o+Aw8YqtfZZPfNRWZYkbidE9k5rpl/hC3vtHHBfGm2Ifi6qWV+coDGkrUKZAxE3Lot5kcsRlh+g==, tarball: https://registry.npmmirror.com/parent-module/-/parent-module-1.0.1.tgz}
     engines: {node: '>=6'}
@@ -1617,27 +1599,8 @@ packages:
   quill-delta@4.2.2:
     resolution: {integrity: sha512-qjbn82b/yJzOjstBgkhtBjN2TNK+ZHP/BgUQO+j6bRhWQQdmj2lH6hXG7+nwwLF41Xgn//7/83lxs9n2BkTtTg==, tarball: https://registry.npmmirror.com/quill-delta/-/quill-delta-4.2.2.tgz}
 
-  quill-delta@5.1.0:
-    resolution: {integrity: sha512-X74oCeRI4/p0ucjb5Ma8adTXd9Scumz367kkMK5V/IatcX6A0vlgLgKbzXWy5nZmCGeNJm2oQX0d2Eqj+ZIlCA==, tarball: https://registry.npmmirror.com/quill-delta/-/quill-delta-5.1.0.tgz}
-    engines: {node: '>= 12.0.0'}
-
-  quill-image-resize-custom-module@4.1.7:
-    resolution: {integrity: sha512-JWKum1UKcuqke8IjMlStSBTX6fP4+2wTq0yfSLBvoNWn+CCBTysBFsnTUUndvaNwQbxgYYy2tMh8wfNfQMRuoQ==, tarball: https://registry.npmmirror.com/quill-image-resize-custom-module/-/quill-image-resize-custom-module-4.1.7.tgz}
-
-  quill-image-uploader@1.3.0:
-    resolution: {integrity: sha512-vO43GEn93rGThje/MlotkQE9OV5nOKBZ4oKhn71L/EjrM/J2P/8iDDVd9GEwlsGsbskeJqPLopsSQ4HlVVIn6A==, tarball: https://registry.npmmirror.com/quill-image-uploader/-/quill-image-uploader-1.3.0.tgz}
-    peerDependencies:
-      quill: ^1.3.7
-
   quill@1.3.7:
     resolution: {integrity: sha512-hG/DVzh/TiknWtE6QmWAF/pxoZKYxfe3J/d/+ShUWkDvvkZQVTPeVmUJVu1uE6DDooC4fWTiCLh84ul89oNz5g==, tarball: https://registry.npmmirror.com/quill/-/quill-1.3.7.tgz}
-
-  quill@2.0.3:
-    resolution: {integrity: sha512-xEYQBqfYx/sfb33VJiKnSJp8ehloavImQ2A6564GAbqG55PGw1dAWUn1MUbQB62t0azawUS2CZZhWCjO8gRvTw==, tarball: https://registry.npmmirror.com/quill/-/quill-2.0.3.tgz}
-    engines: {npm: '>=8.2.3'}
-
-  raw-loader@0.5.1:
-    resolution: {integrity: sha512-sf7oGoLuaYAScB4VGr0tzetsYlS8EJH6qnTCfQ/WVEa89hALQ4RQfCKt5xCyPQKPDUbVUAIP1QsxAwfAjlDp7Q==, tarball: https://registry.npmmirror.com/raw-loader/-/raw-loader-0.5.1.tgz}
 
   regenerator-runtime@0.14.1:
     resolution: {integrity: sha512-dYnhHh0nJoMfnkZs6GmmhFknAGRrLznOu5nc9ML+EJxGvrx6H7teuevqVqCuPcPK//3eDrrjQhehXVx9cnkGdw==, tarball: https://registry.npmmirror.com/regenerator-runtime/-/regenerator-runtime-0.14.1.tgz}
@@ -3167,8 +3130,6 @@ snapshots:
 
   eventemitter3@2.0.3: {}
 
-  eventemitter3@5.0.1: {}
-
   execa@9.5.2:
     dependencies:
       '@sindresorhus/merge-streams': 4.0.0
@@ -3195,8 +3156,6 @@ snapshots:
   fast-diff@1.1.2: {}
 
   fast-diff@1.2.0: {}
-
-  fast-diff@1.3.0: {}
 
   fast-json-stable-stringify@2.1.0: {}
 
@@ -3528,8 +3487,6 @@ snapshots:
 
   parchment@1.1.4: {}
 
-  parchment@3.0.0: {}
-
   parent-module@1.0.1:
     dependencies:
       callsites: 3.1.0
@@ -3600,22 +3557,6 @@ snapshots:
       lodash.clonedeep: 4.5.0
       lodash.isequal: 4.5.0
 
-  quill-delta@5.1.0:
-    dependencies:
-      fast-diff: 1.3.0
-      lodash.clonedeep: 4.5.0
-      lodash.isequal: 4.5.0
-
-  quill-image-resize-custom-module@4.1.7:
-    dependencies:
-      lodash: 4.17.21
-      quill: 1.3.7
-      raw-loader: 0.5.1
-
-  quill-image-uploader@1.3.0(quill@2.0.3):
-    dependencies:
-      quill: 2.0.3
-
   quill@1.3.7:
     dependencies:
       clone: 2.1.2
@@ -3624,15 +3565,6 @@ snapshots:
       extend: 3.0.2
       parchment: 1.1.4
       quill-delta: 3.6.3
-
-  quill@2.0.3:
-    dependencies:
-      eventemitter3: 5.0.1
-      lodash-es: 4.17.21
-      parchment: 3.0.0
-      quill-delta: 5.1.0
-
-  raw-loader@0.5.1: {}
 
   regenerator-runtime@0.14.1: {}
 
