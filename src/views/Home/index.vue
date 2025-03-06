@@ -6,7 +6,6 @@ const myConferences = ref([]);
 onMounted(async () => {
   const res = await getMyConferenceAPI();
   myConferences.value = res.data;
-  console.log(myConferences.value);
 
 });
 </script>

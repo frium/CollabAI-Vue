@@ -11,7 +11,6 @@ const conferenceStore = useConferenceStore();
 const conferenceInfo = conferenceStore.conferenceInfo;
 
 const formattedDate = formatConferenceTimeAPI(conferenceInfo.startTime, conferenceInfo.endTime);
-console.log(formattedDate);
 
 </script>
 

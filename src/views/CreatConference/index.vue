@@ -40,7 +40,6 @@ const uploadCoverImg = () => {
 
   input.onchange = async (e) => {
     const file = e.target.files[0];
-    console.log(file.size);
     if (!file) return;
     if (!validateFile(file)) return;
     const formData = new FormData();

@@ -2,8 +2,8 @@
 import { changeUserInfoAPI, getCodeAPI, getUserInfoAPI, updateEmailAPI, updatePhoneAPI, updateUsernameAPI, uploadAvatarAPI } from "@/api/user";
 import { computed, reactive, ref } from "vue"
 import { ElMessage } from "element-plus";
-import { ElNotification } from 'element-plus';
 import { useUserStore } from "@/stores/userStore";
+import notificationToast from "@/utils/notificationToast ";
 const userStore = useUserStore();
 
 const checkUserInfo = reactive({
@@ -57,10 +57,7 @@ const changeAvatar = () => {
 
   input.onchange = async (e) => {
     const file = e.target.files[0];
-    console.log(file.size);
     if (!file) return;
-    console.log(222);
-
     if (!validateFile(file)) return;
     const formData = new FormData();
     formData.append('file', file);
@@ -104,11 +101,7 @@ const commit = async (event) => {
     }
   });
   await changeUserInfoAPI(userStore.userInfo);
-  ElNotification({
-    title: 'Success',
-    message: '修改成功',
-    type: 'success'
-  });
+  notificationToast.success('修改成功')
   Object.assign(checkUserInfo, userStore.userInfo);
   const li = event.target.closest(".info-input").parentNode;
   if (!li) return;
@@ -137,11 +130,8 @@ const editInfo = (event) => {
 
 const updateUsername = async (event) => {
   await updateUsernameAPI(userStore.userInfo.username);
-  ElNotification({
-    title: 'Success',
-    message: '修改成功',
-    type: 'success'
-  });
+  notificationToast.success('修改成功')
+
   Object.assign(checkUserInfo, userStore.userInfo);
   cancle(event);
 }
@@ -156,11 +146,7 @@ const emailRegex = /^[a-zA-Z0-9]+([._%+-][a-zA-Z0-9]+)*@[a-zA-Z0-9-]+(\.[a-zA-Z0
 
 const getPhoneCode = () => {
   if (!phoneRegex.test(userStore.userInfo.phone)) {
-    ElNotification({
-      title: 'Error',
-      message: '手机号格式有误',
-      type: 'error'
-    });
+    notificationToast.error('手机号格式有误');
     return;
   }
   isDisabledPhone.value = true;
@@ -178,31 +164,19 @@ const getPhoneCode = () => {
 const updatePhone = async (event) => {
   phoneData.phone = userStore.userInfo.phone;
   if (phoneData.code.length < 6) {
-    ElNotification({
-      title: 'Error',
-      message: '手机验证码长度有误',
-      type: 'error'
-    });
+    notificationToast.error('手机验证码长度有误')
     return;
   }
   await updatePhoneAPI(phoneData);
   phoneData.code = '';
-  ElNotification({
-    title: 'Success',
-    message: '修改成功',
-    type: 'success'
-  });
+  notificationToast.success('修改成功')
   Object.assign(checkUserInfo, userStore.userInfo);
   cancle(event);
 
 }
 const getEmailCode = () => {
   if (!emailRegex.test(userStore.userInfo.email)) {
-    ElNotification({
-      title: 'Error',
-      message: '邮箱格式有误',
-      type: 'error'
-    });
+    notificationToast.error('邮箱格式有误');
     return;
   }
   isDisabledEmail.value = true;
@@ -219,20 +193,12 @@ const getEmailCode = () => {
 const updateEmail = async (event) => {
   emailData.email = userStore.userInfo.email;
   if (emailData.code.length < 6) {
-    ElNotification({
-      title: 'Error',
-      message: '邮箱验证码长度有误',
-      type: 'error'
-    });
+    notificationToast.error('邮箱验证码长度有误')
     return;
   }
   await updateEmailAPI(emailData);
   emailData.data = '';
-  ElNotification({
-    title: 'Success',
-    message: '修改成功',
-    type: 'success'
-  });
+  notificationToast.success('修改成功')
   Object.assign(checkUserInfo, userStore.userInfo);
   cancle(event);
 

@@ -16,7 +16,6 @@ const logout = () => {
 onMounted(async () => {
   const res = await getUserInfoAPI();
   Object.assign(userStore.userInfo, res.data);
-  return;
 })
 </script>
 

@@ -7,8 +7,6 @@ const props = defineProps({
   }
 });
 const formattedDate = formatConferenceTimeAPI(props.conferenceInfo.startTime, props.conferenceInfo.endTime);
-console.log(formattedDate);
-
 </script>
 
 <template>
