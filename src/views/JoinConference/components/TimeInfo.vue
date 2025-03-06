@@ -1,7 +1,7 @@
 <script setup>
 import { useConferenceStore } from '@/stores/conferenceStore';
 import { ElMessage } from "element-plus";
-import { formatConferenceTimeAPI } from '@/api/time'
+import { formatConferenceTimeAPI } from '@/utils/time'
 const copyId = () => {
   navigator.clipboard.writeText(conferenceInfo.id)
   ElMessage.success('已复制会议ID')

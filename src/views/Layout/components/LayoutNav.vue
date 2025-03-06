@@ -11,7 +11,7 @@ import PersonalCard from '@/views/PersonalCenter/components/PersonalCard.vue';
         <RouterLink :to="{ name: 'joinConference' }" class="join-conference-button">加入会议</RouterLink>
       </li>
       <li>
-        <RouterLink to="/" class="reserve-conference-button">预定会议</RouterLink>
+        <RouterLink :to="{ name: 'createConference' }" class="reserve-conference-button">预定会议</RouterLink>
       </li>
       <li>
         <PersonalCard></PersonalCard>

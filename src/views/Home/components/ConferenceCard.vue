@@ -1,5 +1,5 @@
 <script setup>
-import { formatConferenceTimeAPI } from '@/api/time'
+import { formatConferenceTimeAPI } from '@/utils/time'
 
 const props = defineProps({
   conferenceInfo: {

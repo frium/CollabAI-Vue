@@ -23,5 +23,23 @@ export const getMyConferenceAPI = () => {
   });
 };
 
+export const uploadCoverImgAPI = (data) => {
+  return request({
+    url: `/mt/img/upload`,
+    method: 'POST',
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    },
+    data
+  });
+}
+
+export const createConferenceAPI = (data) => {
+  return request({
+    url: '/mt/create',
+    method: 'POST',
+    data
+  })
+}
 
 
