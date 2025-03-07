@@ -3,18 +3,21 @@ import { joinConferenceAPI } from '@/api/conference';
 import QRcodeCard from './components/QRcodeCard.vue';
 import HeadInfo from './components/HeadInfo.vue';
 import { ElMessage } from "element-plus";
-import { ref } from 'vue';
+import { onBeforeMount, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { useConferenceStore } from '@/stores/conferenceStore';
 
 const route = useRoute();
+const isConferenceInfoLoaded = ref(false);
 const conferenceStore = useConferenceStore();
 
-conferenceStore.getShareConferenceInfo();
-
+onBeforeMount(async () => {
+  await conferenceStore.getShareConferenceInfo();
+  isConferenceInfoLoaded.value = true;
+});
 const joinConference = async () => {
   await joinConferenceAPI(route.params.conferenceId);
-  ElMessage.success('加入会议成功')
+  ElMessage.success('加入会议成功');
   //TODO 路由跳转至开会页面
 }
 
@@ -27,7 +30,7 @@ const conferenceId = ref('');
 </script>
 
 <template>
-  <div class="container">
+  <div v-if="isConferenceInfoLoaded" class="container">
     <div v-if="conferenceStore.correctConferenceId" class="conference-card">
       <HeadInfo></HeadInfo>
       <div class="card-button">
@@ -80,7 +83,7 @@ const conferenceId = ref('');
 
     .qr-code {
       position: absolute;
-      top: 47%;
+      top: 40%;
       left: 50%;
       transform: translate(-50%, -50%);
       z-index: 99;

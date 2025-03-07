@@ -17,7 +17,7 @@ const formattedDate = formatConferenceTimeAPI(props.conferenceInfo.startTime, pr
         <div class="triangle"></div>
         <p class="title">{{ props.conferenceInfo.title }}</p>
         <p>发起人:
-          <span style="color: blue; font-size: 18px;">sbzzy</span>
+          <span style="color: blue; font-size: 18px;">{{ props.conferenceInfo.holderName }}</span>
         </p>
         <p style=" font-size: 14px; margin-top: 5px;">{{ formattedDate.startDate + " " + formattedDate.startTime }}</p>
         <hr>
@@ -39,6 +39,7 @@ const formattedDate = formatConferenceTimeAPI(props.conferenceInfo.startTime, pr
   border-radius: 10px;
   font-size: 16px;
   transition: all 0.3s;
+  border: 1px solid #d1cece;
 
   &:hover {
     box-shadow: 5px 5px 5px 5px rgba(0, 0, 0, 0.1);
@@ -82,6 +83,7 @@ const formattedDate = formatConferenceTimeAPI(props.conferenceInfo.startTime, pr
     padding: 10px 0 10px 20px;
 
     .status {
+      font-size: 14px;
       position: absolute;
       top: 5px;
       left: -11px;

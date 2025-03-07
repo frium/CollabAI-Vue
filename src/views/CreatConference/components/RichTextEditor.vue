@@ -1,107 +1,90 @@
 <template>
-  <div style="border: 1px solid #ccc">
-    <Toolbar v-if="showToolbarFlag" :editor="editorRef" :defaultConfig="toolbarConfig" :mode="mode"
-      style="border-bottom: 1px solid #ccc" />
-    <Editor v-model="valueHtml" :defaultConfig="editorConfig" :mode="mode" @onCreated="handleCreated"
-      @onChange="handleChange" :style="{ height: editorHeight, overflowY: 'hidden' }" :readOnly="readOnlyFlag" />
+  <div style="border: 1px solid #ccc;min-width: 365px; max-width: 100%; ">
+    <Toolbar style="border-bottom: 1px solid #ccc" :editor="editorRef" :defaultConfig="toolbarConfig" />
+    <Editor style="height: 400px; overflow-y: hidden;" v-model="rtEditorStore.content" :defaultConfig="editorConfig"
+      @onCreated="handleCreated" />
   </div>
 </template>
 
-<script setup lang="ts">
-import { watch, onBeforeUnmount, nextTick, ref, shallowRef, onMounted } from 'vue'
-import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
-import '@wangeditor/editor/dist/css/style.css' // 引入 css
+<script setup>
+import { shallowRef, onBeforeUnmount } from 'vue'
+import "@wangeditor/editor/dist/css/style.css";
+import { Editor, Toolbar } from "@wangeditor/editor-for-vue";
 import { uploadAvatarAPI } from '@/api/user';
+import { useRTEditorStore } from '@/stores/rtEditorStore';
+const rtEditorStore = useRTEditorStore();
 
-
-// Props：使用属性，子组件接收父组件传递的内容
-const props = defineProps({
-  // 内容
-  content: { type: String, default: '' },
-  // 工具栏是否显示，默认显示
-  showToolbarFlag: { type: Boolean, default: true },
-  // 编辑器高度，默认500px
-  editorHeight: { type: String, default: '500px' },
-  // 编辑器是否只读，默认可编辑
-  readOnlyFlag: { type: Boolean, default: false }
-})
-
-// Emits：使用事件，将子组件内容传递给父组件。父组件使用 update(content: string)
-const emit = defineEmits<{ (e: 'update', content: string): void }>()
-
-const mode = ref('default')
-
-// 编辑器实例，必须用 shallowRef
 const editorRef = shallowRef()
 
-// 内容 HTML
-const valueHtml = ref('')
+// 工具栏配置
+const toolbarConfig = {
+  toolbarKeys: [
+    "headerSelect",  // 标题选择
+    'bold', // 加粗
+    'italic', // 斜体
+    'through', // 删除线
+    'underline', // 下划线
+    'justifyCenter', // 居中对齐
+    'justifyJustify', // 两端对齐
+    'justifyLeft', // 左对齐
+    'justifyRight', // 右对齐
+    'bulletedList', // 无序列表
+    'numberedList', // 有序列表
+    'color', // 文字颜色
+    'insertLink', // 插入链接
+    'fontSize', // 字体大小
+    'lineHeight', // 行高
+    'delIndent', // 缩进
+    'indent', // 增进
+    'divider', // 分割线
+    'insertTable', // 插入表格
+    'undo', // 撤销
+    'redo', // 重做
+    'clearStyle', // 清除格式
+    'fullScreen', // 全屏
+    "blockquote", // 引用
+    "codeBlock", // 代码块
+    "insertImage", // 插入图片
+    "uploadImage", // 上传图片
+  ]
+}
 
-const toolbarConfig = {}
 
+// 编辑器配置
 const editorConfig = {
   placeholder: '请输入内容...',
-  MENU_CONF: {} as any
-}
+  MENU_CONF: {},// 初始化 MENU_CONF 对象
+};
 
 // 上传图片配置
 editorConfig.MENU_CONF['uploadImage'] = {
   async customUpload(file, insertFn) {
     const formData = new FormData();
     formData.append("file", file);
-    uploadAvatarAPI(formData)
-      .then((res) => {
-        insertFn(
-          res.data.url
-        );
-      })
-      .catch(() => {
-      });
-  }
-}
 
-const handleCreated = (editor: any) => {
-  editorRef.value = editor // 记录 editor 实例，重要！
-
-  // 根据父组件传递的readOnlyFlag，设置编辑器为只读
-  if (props.readOnlyFlag) {
-    editorRef.value.disable();
-  } else {
-    editorRef.value.enable();
-  }
-}
-
-const handleChange = () => {
-  valueHtml.value = editorRef.value.getHtml()
-  emit('update', valueHtml.value)
-}
-
-// 监听 props 变化，监听父组件传来的content
-watch(() => props.content, (newVal: string) => {
-  nextTick(() => {
-    if (editorRef.value) {
-      // console.log(" 当前编辑器的状态：", editorRef.value);
-
-      // 富文本编辑器按 html 格式回显
-      editorRef.value.setHtml(newVal)
-      valueHtml.value = newVal
+    try {
+      const res = await uploadAvatarAPI(formData); // 假设 uploadAvatarAPI 是一个返回 Promise 的函数
+      insertFn(res.data.url); // 插入图片 URL
+    } catch (error) {
+      console.error('上传图片失败:', error); // 打印错误信息
     }
-  })
-}
-)
-
-onMounted(async () => {
-  await nextTick(); // 延迟渲染，确保 DOM 更新完成
-  if (props.content) {
-    valueHtml.value = props.content
   }
-})
+};
 
 // 组件销毁时，也及时销毁编辑器
 onBeforeUnmount(() => {
+  rtEditorStore.content = '';
   const editor = editorRef.value
   if (editor == null) return
-  editor.destroy()
+  editor.destroy();
 })
 
+
+const handleCreated = (editor) => {
+  editorRef.value = editor
+}
+
+
 </script>
+
+<style lang='scss' scoped></style>

@@ -22,13 +22,15 @@ onMounted(async () => {
 <template>
 
   <div v-if="jwt" class="personal-card">
-    <span>{{ userStore.userInfo.nickname }}</span>
     <el-dropdown placement="bottom" class="el-dropdown-bottom">
-      <img :src="userStore.userInfo.avatar" alt="">
+      <div style="display: flex; align-items: center;">
+        <span style="color: black;">{{ userStore.userInfo.nickname }}</span>
+        <img :src="userStore.userInfo.avatar" alt="">
+      </div>
       <template #dropdown>
-        <el-dropdown-menu>
+        <el-dropdown-menu style="width: 120px;">
           <el-dropdown-item>
-            <RouterLink :to="{ name: 'personalCenter' }">个人主页</RouterLink>
+            <RouterLink :to="{ name: 'personalCenter' }" style=" color: black;">个人主页</RouterLink>
           </el-dropdown-item>
           <el-dropdown-item>
             <button @click="logout">退出登录</button>
@@ -44,14 +46,8 @@ onMounted(async () => {
 
 <style scoped lang="scss">
 .personal-card {
-  display: flex;
-  align-items: center;
-  font-size: 14px;
-
-
   span {
     width: 80px;
-    display: -webkit-box;
     white-space: nowrap;
     word-break: break-all;
     -webkit-box-orient: vertical;
@@ -59,7 +55,11 @@ onMounted(async () => {
     overflow: hidden;
     text-overflow: ellipsis;
     text-align: center;
-    margin-left: 10px;
+    margin: 0 6px;
+  }
+
+  .el-dropdown-bottom .el-tooltip__trigger:focus-visible {
+    outline: none;
   }
 
   .el-dropdown-bottom {

@@ -8,6 +8,9 @@ import PersonalCard from '@/views/PersonalCenter/components/PersonalCard.vue';
 
     <ul class="home-layout-nav-ul">
       <li>
+        <RouterLink :to="{ name: 'home' }" class="join-conference-button">我的会议</RouterLink>
+      </li>
+      <li>
         <RouterLink :to="{ name: 'joinConference' }" class="join-conference-button">加入会议</RouterLink>
       </li>
       <li>
@@ -27,7 +30,9 @@ import PersonalCard from '@/views/PersonalCenter/components/PersonalCard.vue';
   min-width: 1000px;
   height: 50px;
   padding: 10px 40px;
-  background-color: #78aff7;
+  background-color: #f5f8fb;
+  border-bottom: 1px solid #d1cece;
+  user-select: none;
 
   .title {
     margin-right: auto;
@@ -38,16 +43,28 @@ import PersonalCard from '@/views/PersonalCenter/components/PersonalCard.vue';
     justify-content: flex-end;
     align-items: center;
 
-    .join-conference-button {
-      border-right: 2px solid #666;
-      padding: 0px 15px;
+    li {
+      &:hover {
+        color: #6397ef;
+
+      }
+
+      position: relative;
+
+      .router-link-active {
+        color: #6397ef;
+      }
+
+      .join-conference-button,
+      .reserve-conference-button {
+        border-right: 2px solid #666;
+        padding: 0px 15px;
+      }
     }
 
-    .reserve-conference-button {
-      border-right: 2px solid #666;
-      padding: 0px 15px;
 
-    }
+
+
   }
 
 }

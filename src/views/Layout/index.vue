@@ -14,7 +14,6 @@ import LayoutNav from './components/LayoutNav.vue';
   width: 1350px;
   min-height: calc(100vh - 70px);
   margin: 15px auto 0 auto;
-  background: #c7c7c7;
   padding: 10px 30px;
 }
 </style>

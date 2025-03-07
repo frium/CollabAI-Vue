@@ -20,6 +20,8 @@ body {
 
 body {
   font-family: 'Roboto', sans-serif;
+  background: url('https://cdn.deepseek.com/blog/banner-background.webp') no-repeat center;
+  background-size: cover;
 }
 
 /* 超链接默认样式 */
@@ -65,8 +67,7 @@ ol {
   list-style: none;
 }
 
-p,
-span {
+p {
   font-size: 14px;
 }
 
@@ -91,7 +92,6 @@ i {
 
 
 .container {
-  width: 1400px;
   margin: 0 auto;
   position: relative;
 }

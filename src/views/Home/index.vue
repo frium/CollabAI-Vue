@@ -11,6 +11,7 @@ onMounted(async () => {
 </script>
 
 <template>
+  <h2>我的会议</h2>
   <div class="conference-cards">
     <template v-for="myConference in myConferences" :key="myConference.id">
       <ConferenceCard :conferenceInfo="myConference"></ConferenceCard>
