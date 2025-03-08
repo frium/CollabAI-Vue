@@ -30,6 +30,32 @@ const router = createRouter({
           name: 'createConference',
           path: 'createConference',
           component: () => import('@/views/CreatConference/index.vue')
+        },
+        {
+          name: 'startConference',
+          path: 'startConference',
+          component: () => import('@/views/StartConference/index.vue'),
+          children: [
+            {
+              path: ':startConferenceId',
+              redirect: { name: 'conferenceAI' }
+            },
+            {
+              name: 'conferenceAI',
+              path: 'conferenceAI/:startConferenceId',
+              component: () => import('@/views/StartConference/components/ConferenceAI.vue')
+            },
+            {
+              name: 'editConference',
+              path: 'editConference/:startConferenceId',
+              component: () => import('@/views/StartConference/components/EditConference.vue')
+            },
+            {
+              name: 'conferenceDetail',
+              path: 'conferenceDetail/:startConferenceId',
+              component: () => import('@/views/StartConference/components/ConferenceDetail.vue')
+            }
+          ]
         }
       ]
     },

@@ -43,7 +43,6 @@ function getDefaultTimeRange() {
 }
 
 const time = ref(getDefaultTimeRange());
-console.log(time.value);
 
 const thumbnailUrl = ref('');
 const changeImg = ref(false);

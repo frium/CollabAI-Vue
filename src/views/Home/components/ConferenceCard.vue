@@ -1,5 +1,6 @@
 <script setup>
 import { formatConferenceTimeAPI } from '@/utils/time'
+import { computed } from 'vue';
 
 const props = defineProps({
   conferenceInfo: {
@@ -7,17 +8,44 @@ const props = defineProps({
   }
 });
 const formattedDate = formatConferenceTimeAPI(props.conferenceInfo.startTime, props.conferenceInfo.endTime);
+const statusClass = computed(() => {
+  switch (formattedDate.status) {
+    case '未开始':
+      return 'status-blue';
+    case '进行中':
+      return 'status-green';
+    case '已结束':
+      return 'status-red';
+    default:
+      return '';
+  }
+});
+
+const triangleClass = computed(() => {
+  switch (formattedDate.status) {
+    case '未开始':
+      return 'triangle-blue';
+    case '进行中':
+      return 'triangle-green';
+    case '已结束':
+      return 'triangle-red';
+    default:
+      return '';
+  }
+});
 </script>
 
 <template>
-  <RouterLink to="/">
+  <RouterLink :to="`/startConference/${props.conferenceInfo.id}`">
     <div class="conference-card">
       <div class="left">
-        <span class="status">{{ formattedDate.status }}</span>
-        <div class="triangle"></div>
+        <div :class="['status', statusClass]">
+          <span style="scale: 0.9; display: block;">{{ formattedDate.status }}</span>
+        </div>
+        <div :class="['triangle', triangleClass]"></div>
         <p class="title">{{ props.conferenceInfo.title }}</p>
         <p>发起人:
-          <span style="color: blue; font-size: 18px;">{{ props.conferenceInfo.holderName }}</span>
+          <span style="color: #6397ef; font-size: 18px;">{{ props.conferenceInfo.holderName }}</span>
         </p>
         <p style=" font-size: 14px; margin-top: 5px;">{{ formattedDate.startDate + " " + formattedDate.startTime }}</p>
         <hr>
@@ -83,8 +111,9 @@ const formattedDate = formatConferenceTimeAPI(props.conferenceInfo.startTime, pr
     padding: 10px 0 10px 20px;
 
     .status {
-      font-size: 14px;
       position: absolute;
+      font-size: 10px;
+      color: #f5f9ff;
       top: 5px;
       left: -11px;
       width: 65px;
@@ -92,6 +121,18 @@ const formattedDate = formatConferenceTimeAPI(props.conferenceInfo.startTime, pr
       background: pink;
       padding: 3px 10px;
       border-radius: 2px;
+    }
+
+    .status-blue {
+      background-color: #5a9cf8;
+    }
+
+    .status-green {
+      background-color: #67c23a;
+    }
+
+    .status-red {
+      background-color: #f56c6c;
     }
 
     .triangle {
@@ -105,6 +146,21 @@ const formattedDate = formatConferenceTimeAPI(props.conferenceInfo.startTime, pr
       border-left: 6px solid transparent;
       border-bottom: 6px solid transparent;
       filter: drop-shadow(-1px 1px 1px rgba(0, 0, 0, 0.1));
+    }
+
+    .triangle-blue {
+      border-top: 6px solid #5a9cf8;
+      border-right: 6px solid #5a9cf8;
+    }
+
+    .triangle-green {
+      border-top: 6px solid #67c23a;
+      border-right: 6px solid #67c23a;
+    }
+
+    .triangle-red {
+      border-top: 6px solid #f56c6c;
+      border-right: 6px solid #f56c6c;
     }
   }
 
