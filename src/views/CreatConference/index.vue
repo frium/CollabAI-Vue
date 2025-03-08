@@ -145,7 +145,8 @@ const backToHome = () => {
   margin: auto;
   padding: 30px 50px;
   background: #ffffff;
-  border: 1px solid #d1cece;
+  box-shadow: 2px 5px 10px 3px rgba(0, 0, 0, 0.2);
+  margin-bottom: 30px;
 
   .change-img {
     position: absolute;

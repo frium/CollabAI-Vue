@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { reactive, ref } from 'vue';
-import { getShareConferenceInfoAPI } from '@/api/conference';
+import { getConferenceInfoAPI, getShareConferenceInfoAPI } from '@/api/conference';
 import { useRoute } from 'vue-router';
 import router from '@/router';
 
@@ -21,8 +21,9 @@ export const useConferenceStore = defineStore('conference', () => {
     "createTime": ""
   });
   const correctConferenceId = ref(false);
+  const route = useRoute();
+
   const getShareConferenceInfo = async () => {
-    const route = useRoute();
     const conferenceId = route.params.conferenceId;
     if (!conferenceId) return;
     try {
@@ -34,10 +35,18 @@ export const useConferenceStore = defineStore('conference', () => {
       router.push({ name: 'joinConference' })
     }
   }
+  const startConferenceInfo = ref({});
+
+  const getStartConferenceInfo = async () => {
+    const res = await getConferenceInfoAPI(route.params.startConferenceId);
+    startConferenceInfo.value = res.data;
+  }
 
   return {
     conferenceInfo,
     getShareConferenceInfo,
-    correctConferenceId
+    correctConferenceId,
+    startConferenceInfo,
+    getStartConferenceInfo
   }
 })

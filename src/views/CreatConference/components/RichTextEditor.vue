@@ -13,6 +13,7 @@ import { Editor, Toolbar } from "@wangeditor/editor-for-vue";
 import { uploadAvatarAPI } from '@/api/user';
 import { useRTEditorStore } from '@/stores/rtEditorStore';
 const rtEditorStore = useRTEditorStore();
+console.log(rtEditorStore.content);
 
 const editorRef = shallowRef()
 

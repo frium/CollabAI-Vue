@@ -42,4 +42,12 @@ export const createConferenceAPI = (data) => {
   })
 }
 
+export const updateConferenceInfoAPI = (data) => {
+  return request({
+    url: '/mt/edit',
+    method: 'PUT',
+    data
+  })
+}
+
 
