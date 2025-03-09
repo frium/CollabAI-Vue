@@ -22,8 +22,8 @@ onMounted(async () => {
 <style scoped lang="scss">
 .conference-cards {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  justify-content: center;
+  grid-template-columns: repeat(auto-fit, minmax(300px, auto));
+  justify-content: start;
   gap: 20px 30px;
   width: 100%;
   margin-top: 15px;

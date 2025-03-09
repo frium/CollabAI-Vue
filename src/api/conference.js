@@ -51,3 +51,29 @@ export const updateConferenceInfoAPI = (data) => {
 }
 
 
+export const getMyAuthAPI = (conferenceId) => {
+  return request({
+    url: `/mt/auth/${conferenceId}`,
+  });
+}
+
+export const getParticipantsAPI = (conferenceId) => {
+  return request({
+    url: `/mt/participants/${conferenceId}`,
+  });
+}
+
+export const updateParticipantsAPI = (conferenceId, data) => {
+  return request({
+    url: `/mt/participants/${conferenceId}`,
+    method: 'PUT',
+    data
+  })
+}
+
+export const deleteConferenceAPI = (conferenceId) => {
+  return request({
+    url: `/mt/del/${conferenceId}`,
+    method: 'DELETE',
+  })
+}

@@ -3,7 +3,7 @@ import { ref } from 'vue';
 
 
 export const useRTEditorStore = defineStore('rtEditor', () => {
-  const content = ref('1');
+  const content = ref('');
 
   return {
     content

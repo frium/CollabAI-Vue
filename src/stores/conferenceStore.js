@@ -10,7 +10,7 @@ export const useConferenceStore = defineStore('conference', () => {
     "id": "",
     "title": "",
     "holderName": "",
-    "holderAvatar": "h",
+    "holderAvatar": "",
     "isHolder": null,
     "startTime": "",
     "endTime": "",
@@ -40,6 +40,7 @@ export const useConferenceStore = defineStore('conference', () => {
   const getStartConferenceInfo = async () => {
     const res = await getConferenceInfoAPI(route.params.startConferenceId);
     startConferenceInfo.value = res.data;
+    startConferenceInfo.value.mdContent = JSON.parse(res.data.mdContent);
   }
 
   return {

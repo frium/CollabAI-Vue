@@ -1,7 +1,6 @@
 <script setup>
 import OperationMenu from './components/OperationMenu.vue';
 import { useConferenceStore } from '@/stores/conferenceStore';
-import { ref } from 'vue';
 
 const conferenceStore = useConferenceStore();
 conferenceStore.getStartConferenceInfo();
@@ -9,11 +8,11 @@ conferenceStore.getStartConferenceInfo();
 
 <template>
   <div class="head">
-    <h1>{{ '会议主题: ' + (conferenceStore.startConferenceInfo.title ? conferenceStore.startConferenceInfo.title : "") }}
-    </h1>
+    <h2>{{ '会议主题: ' + (conferenceStore.startConferenceInfo.title ? conferenceStore.startConferenceInfo.title : "") }}
+    </h2>
     <OperationMenu></OperationMenu>
   </div>
-  <div style=" margin:  10px 30px;">
+  <div style=" margin:  10px 0;">
     <RouterView></RouterView>
   </div>
 </template>

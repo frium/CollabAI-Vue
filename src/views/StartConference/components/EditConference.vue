@@ -3,7 +3,7 @@ import { onMounted, ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import { generateThumbnails } from '@/utils/upload';
 import RichTextEditor from '@/views/CreatConference/components/RichTextEditor.vue';
-import { updateConferenceInfoAPI } from '@/api/conference';
+import { deleteConferenceAPI, updateConferenceInfoAPI } from '@/api/conference';
 import { useRouter } from 'vue-router';
 import { uploadCoverImgAPI } from '@/api/conference';
 import { useRTEditorStore } from '@/stores/rtEditorStore';
@@ -98,7 +98,13 @@ onMounted(async () => {
   time.value = [form.value.startTime, form.value.endTime];
   thumbnailUrl.value = form.value.coverImg;
   rtEditorStore.content = form.value.mdContent;
-})
+});
+
+const deleteConference = () => {
+  deleteConferenceAPI(conferenceStore.startConferenceInfo.id);
+  ElMessage.success("解散成功!")
+  router.push({ name: 'home' });
+}
 </script>
 
 <template>
@@ -135,7 +141,7 @@ onMounted(async () => {
     <div style=" margin-top: 20px;">
       <el-button type="primary" @click="submit">确认修改</el-button>
       <el-button @click="backToHome">取消修改</el-button>
-      <el-button type="danger">解散会议</el-button>
+      <el-button type="danger" @click="deleteConference">解散会议</el-button>
     </div>
   </div>
 </template>

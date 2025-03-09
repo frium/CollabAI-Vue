@@ -46,5 +46,6 @@ const router = useRouter();
 
 ::v-deep(.active) {
   color: #409eff;
+  background: rgb(235.9, 245.3, 255);
 }
 </style>
