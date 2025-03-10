@@ -19,11 +19,11 @@ request.interceptors.response.use(
       return res.data;
     }
     if (res.data.code !== 200) {
-      if (res.data.code === 401) {
-        notificationToast.warning('用户身份过期,请重新登录!');
-        router.push({ name: "login" });
-        return Promise.reject(res.data);
-      }
+      // if (res.data.code === 40002) {
+      //   notificationToast.warning('用户身份过期,请重新登录!');
+      //   router.push({ name: "login" });
+      //   return Promise.reject(res.data);
+      // }
       const errorMsg = res.data.msg || '请求异常，请稍后重试'
       notificationToast.error(errorMsg)
       return Promise.reject(res.data);
@@ -35,7 +35,8 @@ request.interceptors.response.use(
   error => {
     if (error.response?.status === 401) {
       notificationToast.warning('用户身份过期,请重新登录!')
-      router.push({ name: "login" });
+      const redirectUrl = Object.assign(router.currentRoute.value.fullPath)
+      router.push(`/login?redirect=${redirectUrl}`);
       return Promise.reject(error);
     }
 

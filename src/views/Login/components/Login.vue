@@ -3,6 +3,9 @@ import { onMounted, reactive, ref } from "vue";
 import { ElMessage } from "element-plus";
 import { loginAPI } from "@/api/user";
 import router from "@/router";
+import { useRoute } from "vue-router"
+
+const route = useRoute()
 
 const form = reactive({
   username: "",
@@ -37,7 +40,8 @@ const login = async () => {
     } else {
       localStorage.removeItem('userLoginInfo');
     };
-    router.push({ name: 'home' })
+    const redirect = route.query.redirect
+    router.push(redirect || '/home')
   } else {
     ElMessage.error("请填写完整的表单信息");
   };
