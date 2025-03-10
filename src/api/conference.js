@@ -77,3 +77,6 @@ export const deleteConferenceAPI = (conferenceId) => {
     method: 'DELETE',
   })
 }
+
+
+

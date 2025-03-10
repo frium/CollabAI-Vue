@@ -5,8 +5,10 @@ import { computed, onMounted, ref } from 'vue';
 import MarkdownViewer from './MarkdownViewer.vue';
 import UserInfoCard from './UserInfoCard.vue';
 import TurndownService from 'turndown'
+import UpdateParticipants from './UpdateParticipants.vue';
 const conferenceStore = useConferenceStore();
 const participants = ref([]);
+const showParticipants = ref(false);
 const mdContent = ref('');
 
 
@@ -32,11 +34,8 @@ onMounted(async () => {
   }
   const res = await getParticipantsAPI(conferenceStore.startConferenceInfo.id);
   participants.value = res.data;
+  showParticipants.value = true;
   mdContent.value = turndown.turndown(conferenceStore.startConferenceInfo.mdContent);
-  console.log(conferenceStore.startConferenceInfo.mdContent);
-
-  console.log(mdContent.value);
-
 });
 const conferenceLink = computed(() => window.location.origin + '/joinConference/' + conferenceStore.startConferenceInfo.id);
 
@@ -89,6 +88,7 @@ const changeDocumentstate = () => {
         <img src="@/assets/icons/subtract.svg" alt="">
       </button>
     </div>
+    <UpdateParticipants v-if="showParticipants" :participants="participants"></UpdateParticipants>
   </div>
 </template>
 
