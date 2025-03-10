@@ -85,6 +85,9 @@ const changeDocumentstate = () => {
       <template v-for="participant in participants" :key="participant.userId">
         <UserInfoCard :head-img="participant.headImg" :username="participant.username"></UserInfoCard>
       </template>
+      <button class="remove-attendee">
+        <img src="@/assets/icons/subtract.svg" alt="">
+      </button>
     </div>
   </div>
 </template>
@@ -135,6 +138,24 @@ const changeDocumentstate = () => {
     gap: 20px 30px;
     width: 100%;
     margin-top: 15px;
+
+    .remove-attendee {
+      display: flex;
+      align-items: center;
+      width: 52px;
+      height: 52px;
+      border: 2px dashed #bfbfbf;
+      border-radius: 10%;
+
+      &:hover {
+        border: 2px dashed #898989;
+      }
+
+      img {
+        width: 26px;
+        margin: auto;
+      }
+    }
   }
 }
 </style>

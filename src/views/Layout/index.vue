@@ -1,11 +1,13 @@
 <script setup>
+import { useLayoutStore } from '@/stores/layoutStore';
 import LayoutNav from './components/LayoutNav.vue';
+const layoutStore = useLayoutStore();
 </script>
 
 <template>
   <LayoutNav></LayoutNav>
   <div class="home-router-view">
-    <router-view></router-view>
+    <router-view v-if="layoutStore.layoutRequestState"></router-view>
   </div>
 </template>
 

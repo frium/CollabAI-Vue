@@ -40,8 +40,9 @@ const login = async () => {
     } else {
       localStorage.removeItem('userLoginInfo');
     };
-    const redirect = route.query.redirect
-    router.push(redirect || '/home')
+    const redirectUrl = sessionStorage.getItem("redirectUrl") || "/home";
+    sessionStorage.removeItem("redirectUrl");
+    router.replace(redirectUrl);
   } else {
     ElMessage.error("请填写完整的表单信息");
   };

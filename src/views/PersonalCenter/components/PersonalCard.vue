@@ -4,6 +4,7 @@ import { ElMessage } from "element-plus";
 import { getUserInfoAPI } from '@/api/user';
 import { onMounted } from 'vue';
 import { useUserStore } from '@/stores/userStore';
+import { useLayoutStore } from '@/stores/layoutStore';
 
 const router = useRouter();
 const jwt = localStorage.getItem('jwt');
@@ -16,6 +17,8 @@ const logout = () => {
 onMounted(async () => {
   const res = await getUserInfoAPI();
   Object.assign(userStore.userInfo, res.data);
+  const layoutStore = useLayoutStore();
+  layoutStore.layoutRequestState = true;
 })
 </script>
 
@@ -71,5 +74,9 @@ onMounted(async () => {
     }
   }
 
+}
+
+.to-login {
+  margin: 0 10px;
 }
 </style>

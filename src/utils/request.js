@@ -35,8 +35,8 @@ request.interceptors.response.use(
   error => {
     if (error.response?.status === 401) {
       notificationToast.warning('用户身份过期,请重新登录!')
-      const redirectUrl = Object.assign(router.currentRoute.value.fullPath)
-      router.push(`/login?redirect=${redirectUrl}`);
+      sessionStorage.setItem("redirectUrl", router.currentRoute.value.fullPath);
+      router.push("/login");
       return Promise.reject(error);
     }
 

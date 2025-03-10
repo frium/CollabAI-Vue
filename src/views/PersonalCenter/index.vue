@@ -420,7 +420,7 @@ const updateEmail = async (event) => {
       background: #fff;
       box-shadow: 2px 5px 10px rgba(0, 0, 0, 0.2);
       margin-top: 20px;
-      padding: 5px 16px;
+      padding: 10px 24px;
 
       .title {
         font-size: 18px;

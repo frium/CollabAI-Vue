@@ -29,7 +29,7 @@ const props = defineProps({
     flex-shrink: 0;
     width: 100%;
     height: 50px;
-    border-radius: 50%;
+    border-radius: 10%;
   }
 }
 </style>
