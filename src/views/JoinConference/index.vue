@@ -6,6 +6,7 @@ import { ElMessage } from "element-plus";
 import { onBeforeMount, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { useConferenceStore } from '@/stores/conferenceStore';
+import router from '@/router';
 
 const route = useRoute();
 const isConferenceInfoLoaded = ref(false);
@@ -16,9 +17,9 @@ onBeforeMount(async () => {
   isConferenceInfoLoaded.value = true;
 });
 const joinConference = async () => {
-  await joinConferenceAPI(route.params.conferenceId);
+  await joinConferenceAPI(conferenceId.value);
   ElMessage.success('加入会议成功');
-  //TODO 路由跳转至开会页面
+  router.push({ name: "home" })
 }
 
 const showQRcode = ref(false);

@@ -10,7 +10,7 @@ conferenceStore.getStartConferenceInfo();
   <div class="head">
     <h2>{{ '会议主题: ' + (conferenceStore.startConferenceInfo.title ? conferenceStore.startConferenceInfo.title : "") }}
     </h2>
-    <OperationMenu></OperationMenu>
+    <OperationMenu v-if="conferenceStore.startConferenceInfo.title"></OperationMenu>
   </div>
   <div style=" margin:  10px 0;">
     <RouterView></RouterView>

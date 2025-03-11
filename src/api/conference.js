@@ -78,5 +78,25 @@ export const deleteConferenceAPI = (conferenceId) => {
   })
 }
 
+export const startConferenceAPI = (conferenceId) => {
+  return request({
+    url: `/mt/start/${conferenceId}`,
+    method: 'POST',
+  })
+}
+
+export const stopConferenceAPI = (conferenceId) => {
+  return request({
+    url: `/mt/stop/${conferenceId}`,
+    method: 'POST',
+  })
+}
+
+export const leaveConferenceAPI = (conferenceId) => {
+  return request({
+    url: `/mt/leave/${conferenceId}`,
+    method: 'POST',
+  })
+}
 
 

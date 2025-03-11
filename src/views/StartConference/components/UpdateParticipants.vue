@@ -1,7 +1,7 @@
 <script setup>
-import { getMyAuthAPI, updateParticipantsAPI } from '@/api/conference';
+import { updateParticipantsAPI } from '@/api/conference';
 import { ElMessage } from 'element-plus';
-import { computed, onMounted, ref, watch } from 'vue';
+import { ref } from 'vue';
 import { useRoute } from 'vue-router';
 
 const route = useRoute();
@@ -9,6 +9,10 @@ const props = defineProps({
   participants: {
     type: Array,
     default: []
+  },
+  myAuth: {
+    type: Number,
+    default: -1
   }
 });
 const deleteUser = ref({});
@@ -37,8 +41,8 @@ const handleAdminAuth = (index, data) => {
 const affirmToAdmin = async () => {
   props.participants[toAdminUser.value.index].authType = 1;
   props.participants[0].authType = 2;
+  props.myAuth.value = 2;
   await updateParticipantsAPI(route.params.startConferenceId, props.participants);
-  myAuth.value = 2;
   ElMessage.success('转让成功!')
   toAdminDialogVisible.value = false;
   props.participants.sort((a, b) => a.authType - b.authType);
@@ -50,14 +54,20 @@ const handleDelete = (index, data) => {
   dialogVisible.value = true;
 }
 const affirmDelete = async () => {
-  props.participants.splice(deleteUser.value.index, deleteUser.value.index);
   dialogVisible.value = false;
+  props.participants.splice(deleteUser.value.index, deleteUser.value.index);
   await updateParticipantsAPI(route.params.startConferenceId, props.participants);
   ElMessage.success('踢出成功!')
 }
 const selectedIndexes = ref([]);
 
 const handleDeleteAllSelected = () => {
+  console.log(selectedIndexes.value[0].userId);
+
+  if (selectedIndexes.value[0].authType === 1) {
+    ElMessage.error('不能删除创建者!');
+    return;
+  }
   if (selectedIndexes.value.length === 0) {
     ElMessage.error('暂未选择任何用户!');
     return;
@@ -65,33 +75,27 @@ const handleDeleteAllSelected = () => {
   deleteAllDialogVisible.value = true;
 }
 const affirmDeleteAll = async () => {
+  deleteAllDialogVisible.value = false;
   for (let i = 0; i < props.participants.length; i++) {
     for (let j = 0; j < selectedIndexes.value.length; j++) {
-      if (props.participants[i].userId === selectedIndexes.value[j]) props.participants.splice(i, 1);
+      if (props.participants[i].userId === selectedIndexes.value[j].userId) props.participants.splice(i, 1);
     }
   }
-  deleteAllDialogVisible.value = false;
   await updateParticipantsAPI(route.params.startConferenceId, props.participants);
   ElMessage.success('踢出成功!')
 
 }
 const handleSelectionChange = (selectedRows) => {
-  selectedIndexes.value = selectedRows.map(row => row.userId);
+  selectedIndexes.value = selectedRows;
 };
 
-
-const myAuth = ref(-1);
-onMounted(async () => {
-  const res = await getMyAuthAPI(route.params.startConferenceId);
-  myAuth.value = res.data.authType;
-});
 </script>
 
 <template>
   <div class="upadte-participants">
     <el-table ref="multipleTableRef" :data="props.participants" row-key="userId" style="width: 900px"
       @selection-change="handleSelectionChange">
-      <el-table-column v-if="myAuth === 1" type="selection" width="55" />
+      <el-table-column v-if="props.myAuth === 1" type="selection" width="55" />
       <el-table-column width="65">
         <template #default="{ row }">
           <img style="width: 40px; height: 40px; border-radius: 10%;" :src="row.avatar" alt="">
@@ -118,23 +122,23 @@ onMounted(async () => {
           </div>
         </template>
       </el-table-column>
-      <el-table-column v-if="myAuth === 1" width="450">
+      <el-table-column v-if="props.myAuth === 1" width="450">
         <template #default="scope">
           <div style="margin-left: auto; width: 180px; display: flex; justify-content: flex-end;">
             <el-button size="small" type="warning" @click="handleAuthorizate(scope.$index, scope.row)"
-              v-if="myAuth === 1 && scope.row.authType === 2">
+              v-if="props.myAuth === 1 && scope.row.authType === 2">
               撤权
             </el-button>
             <el-button size="small" type="warning" @click="handleAuthorizate(scope.$index, scope.row)"
-              v-else-if="myAuth === 1 && scope.$index !== 0">
+              v-else-if="props.myAuth === 1 && scope.$index !== 0">
               授权
             </el-button>
             <el-button size="small" type="warning" @click="handleAdminAuth(scope.$index, scope.row)"
-              v-if="myAuth === 1 && scope.$index !== 0">
+              v-if="props.myAuth === 1 && scope.$index !== 0">
               转让
             </el-button>
             <el-button size="small" type="danger" @click="handleDelete(scope.$index, scope.row)"
-              v-if="myAuth === 1 && scope.$index !== 0">
+              v-if="props.myAuth === 1 && scope.$index !== 0">
               删除
             </el-button>
           </div>
@@ -142,13 +146,13 @@ onMounted(async () => {
       </el-table-column>
     </el-table>
     <div class="operate-menue">
-      <el-button style="width: 120px;" v-if="myAuth === 1 && props.participants.length !== 1" type="danger"
+      <el-button style="width: 120px;" v-if="props.myAuth === 1 && props.participants.length !== 1" type="danger"
         @click="handleDeleteAllSelected">
         删除所有选择
       </el-button>
       <div v-else style="width: 120px;"></div>
     </div>
-    <el-dialog v-model="dialogVisible" title="警告" width="500" :before-close="handleClose">
+    <el-dialog v-model="dialogVisible" title="警告" width="500">
       <span>确认将当前用户 <span style="color: red;">{{ ' ' + deleteUser.nickname + ' ' }}</span>踢出会议?</span>
       <template #footer>
         <div class="dialog-footer">
@@ -159,7 +163,7 @@ onMounted(async () => {
         </div>
       </template>
     </el-dialog>
-    <el-dialog v-model="deleteAllDialogVisible" title="警告" width="500" :before-close="handleClose">
+    <el-dialog v-model="deleteAllDialogVisible" title="警告" width="500">
       <span>确认将当前选择的所有用户踢出会议?</span>
       <template #footer>
         <div class="dialog-footer">
@@ -171,8 +175,8 @@ onMounted(async () => {
       </template>
     </el-dialog>
 
-    <el-dialog v-model="toAdminDialogVisible" title="警告" width="500" :before-close="handleClose">
-      <span>确认将当前用户<span>{{ toAdminUser.nickname }}</span>设置为创建者?</span>
+    <el-dialog v-model="toAdminDialogVisible" title="警告" width="500">
+      <span>确认将当前用户<span>{{ toAdminUser.username }}</span>设置为创建者?</span>
       <template #footer>
         <div class="dialog-footer">
           <el-button @click="toAdminDialogVisible = false" type="info">取消</el-button>

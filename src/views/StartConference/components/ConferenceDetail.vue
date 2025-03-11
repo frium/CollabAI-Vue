@@ -1,17 +1,19 @@
 <script setup>
-import { getParticipantsAPI } from '@/api/conference';
+import { getMyAuthAPI, getParticipantsAPI } from '@/api/conference';
 import { useConferenceStore } from '@/stores/conferenceStore';
 import { computed, onMounted, ref } from 'vue';
 import MarkdownViewer from './MarkdownViewer.vue';
 import UserInfoCard from './UserInfoCard.vue';
 import TurndownService from 'turndown'
 import UpdateParticipants from './UpdateParticipants.vue';
+import { useRoute } from 'vue-router';
+
 const conferenceStore = useConferenceStore();
 const participants = ref([]);
 const showParticipants = ref(false);
 const mdContent = ref('');
-
-
+const myAuth = ref(-1);
+const route = useRoute();
 const turndown = new TurndownService({
   codeBlockStyle: 'fenced',  // 强制使用 ``` 代码块
   headingStyle: 'atx',       // 强制使用 # 标题
@@ -35,6 +37,8 @@ onMounted(async () => {
   const res = await getParticipantsAPI(conferenceStore.startConferenceInfo.id);
   participants.value = res.data.sort((a, b) => a.authType - b.authType);
   mdContent.value = turndown.turndown(conferenceStore.startConferenceInfo.mdContent);
+  const authRes = await getMyAuthAPI(route.params.startConferenceId);
+  myAuth.value = authRes.data.authType;
 });
 const conferenceLink = computed(() => window.location.origin + '/joinConference/' + conferenceStore.startConferenceInfo.id);
 
@@ -42,9 +46,6 @@ const showAllDoc = ref(false);
 const changeDocumentstate = () => {
   showAllDoc.value = !showAllDoc.value;
 }
-
-
-
 </script>
 
 <template>
@@ -88,9 +89,8 @@ const changeDocumentstate = () => {
       </button>
     </div>
 
-    <el-dialog v-model="showParticipants" width="980px" style="height: 450px; max-height: 550px; overflow: auto;"
-      :before-close="handleClose">
-      <UpdateParticipants :participants="participants" class="update-participants">
+    <el-dialog v-model="showParticipants" width="980px" style="height: 450px; max-height: 550px; overflow: auto;">
+      <UpdateParticipants :participants="participants" :my-auth="myAuth" class="update-participants">
       </UpdateParticipants>
     </el-dialog>
 
