@@ -33,8 +33,7 @@ onMounted(async () => {
     await conferenceStore.getStartConferenceInfo();
   }
   const res = await getParticipantsAPI(conferenceStore.startConferenceInfo.id);
-  participants.value = res.data;
-  showParticipants.value = true;
+  participants.value = res.data.sort((a, b) => a.authType - b.authType);
   mdContent.value = turndown.turndown(conferenceStore.startConferenceInfo.mdContent);
 });
 const conferenceLink = computed(() => window.location.origin + '/joinConference/' + conferenceStore.startConferenceInfo.id);
@@ -82,18 +81,25 @@ const changeDocumentstate = () => {
     <h4 style="margin: 20px 0 10px 0;">参会人员:</h4>
     <div class="participants">
       <template v-for="participant in participants" :key="participant.userId">
-        <UserInfoCard :head-img="participant.headImg" :username="participant.username"></UserInfoCard>
+        <UserInfoCard :head-img="participant.avatar" :username="participant.username"></UserInfoCard>
       </template>
-      <button class="remove-attendee">
-        <img src="@/assets/icons/subtract.svg" alt="">
+      <button class="remove-attendee" @click="showParticipants = true">
+        <img src="@/assets/icons/setting.svg" alt="">
       </button>
     </div>
-    <UpdateParticipants v-if="showParticipants" :participants="participants"></UpdateParticipants>
+
+    <el-dialog v-model="showParticipants" width="980px" style="height: 450px; max-height: 550px; overflow: auto;"
+      :before-close="handleClose">
+      <UpdateParticipants :participants="participants" class="update-participants">
+      </UpdateParticipants>
+    </el-dialog>
+
   </div>
 </template>
 
 <style scoped lang="scss">
 .conference-detail {
+  position: relative;
   width: 100%;
   background: #fff;
   box-shadow: 2px 5px 10px 3px rgba(0, 0, 0, 0.2);
@@ -149,13 +155,20 @@ const changeDocumentstate = () => {
 
       &:hover {
         border: 2px dashed #898989;
+
+        img {
+          transform: rotate(180deg);
+        }
       }
 
       img {
         width: 26px;
         margin: auto;
+        transition: transform 0.2s;
       }
     }
   }
+
+  .update-participants {}
 }
 </style>

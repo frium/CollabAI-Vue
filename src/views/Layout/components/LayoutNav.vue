@@ -4,7 +4,9 @@ import PersonalCard from '@/views/PersonalCenter/components/PersonalCard.vue';
 
 <template>
   <div class="home-layout-nav">
-    <h3 class="title">CollabAI</h3>
+    <RouterLink :to="{ name: 'home' }">
+      <h2>CollabAI</h2>
+    </RouterLink>
 
     <ul class="home-layout-nav-ul">
       <li>
@@ -36,9 +38,11 @@ import PersonalCard from '@/views/PersonalCenter/components/PersonalCard.vue';
 
   .title {
     margin-right: auto;
+    font-size: 18px;
   }
 
   .home-layout-nav-ul {
+    margin-left: auto;
     display: flex;
     justify-content: flex-end;
     align-items: center;

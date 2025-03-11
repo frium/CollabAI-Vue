@@ -42,6 +42,8 @@ const router = useRouter();
   display: flex;
   align-items: center;
   font-size: 16px;
+  cursor: pointer;
+  user-select: none;
 }
 
 ::v-deep(.active) {

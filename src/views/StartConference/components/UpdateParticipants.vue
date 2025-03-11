@@ -1,12 +1,10 @@
 <script setup>
 import { getMyAuthAPI, updateParticipantsAPI } from '@/api/conference';
-import { Search } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus';
-import { onMounted, reactive, ref } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 
 const route = useRoute();
-const searchText = ref('');
 const props = defineProps({
   participants: {
     type: Array,
@@ -24,8 +22,9 @@ const handleAuthorizate = async (index, data) => {
   } else {
     props.participants[index].authType = 2;
   }
+  props.participants.sort((a, b) => a.authType - b.authType);
   await updateParticipantsAPI(route.params.startConferenceId, props.participants);
-  ElMessage.success(msg)
+  ElMessage.success(msg);
 }
 const toAdminUser = ref({});
 
@@ -42,6 +41,7 @@ const affirmToAdmin = async () => {
   myAuth.value = 2;
   ElMessage.success('转让成功!')
   toAdminDialogVisible.value = false;
+  props.participants.sort((a, b) => a.authType - b.authType);
 }
 const dialogVisible = ref(false);
 const handleDelete = (index, data) => {
@@ -58,6 +58,10 @@ const affirmDelete = async () => {
 const selectedIndexes = ref([]);
 
 const handleDeleteAllSelected = () => {
+  if (selectedIndexes.value.length === 0) {
+    ElMessage.error('暂未选择任何用户!');
+    return;
+  }
   deleteAllDialogVisible.value = true;
 }
 const affirmDeleteAll = async () => {
@@ -80,22 +84,20 @@ const myAuth = ref(-1);
 onMounted(async () => {
   const res = await getMyAuthAPI(route.params.startConferenceId);
   myAuth.value = res.data.authType;
-})
+});
 </script>
 
 <template>
   <div class="upadte-participants">
     <el-table ref="multipleTableRef" :data="props.participants" row-key="userId" style="width: 900px"
       @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55" />
+      <el-table-column v-if="myAuth === 1" type="selection" width="55" />
       <el-table-column width="65">
         <template #default="{ row }">
           <img style="width: 40px; height: 40px; border-radius: 10%;" :src="row.avatar" alt="">
         </template>
       </el-table-column>
-      <el-table-column property="nickname" width="120" />
-
-
+      <el-table-column property="username" width="120" />
       <el-table-column>
         <template #default="scope">
           <div style="display: flex; justify-content: flex-end;">
@@ -140,8 +142,8 @@ onMounted(async () => {
       </el-table-column>
     </el-table>
     <div class="operate-menue">
-      <el-input v-model="searchText" style="width: 300px" placeholder="输入昵称查询" :suffix-icon="Search" />
-      <el-button style="width: 120px;" v-if="myAuth === 1" type="danger" @click="handleDeleteAllSelected">
+      <el-button style="width: 120px;" v-if="myAuth === 1 && props.participants.length !== 1" type="danger"
+        @click="handleDeleteAllSelected">
         删除所有选择
       </el-button>
       <div v-else style="width: 120px;"></div>
@@ -185,14 +187,11 @@ onMounted(async () => {
 
 <style scoped lang="scss">
 .upadte-participants {
-  position: relative;
-  width: 950px;
-  padding: 20px;
-  border: 1px solid gray;
+  background: #fff;
 
   .operate-menue {
     position: absolute;
-    top: 18px;
+    top: 28px;
     right: 38px;
     z-index: 5;
     display: flex;
