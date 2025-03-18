@@ -98,5 +98,20 @@ export const leaveConferenceAPI = (conferenceId) => {
     method: 'POST',
   })
 }
+export const uploadConferenceSpeechAPI = (conferenceId, data) => {
+  return request({
+    url: `/speech/recognize/${conferenceId}`,
+    headers: {
+      'Content-Type': 'application/octet-stream'
+    },
+    method: 'POST',
+    data
+  })
+}
+export const getConferenceSpeechAPI = (conferenceId) => {
+  return request({
+    url: `/speech/sync/${conferenceId}`,
+  })
+}
 
 

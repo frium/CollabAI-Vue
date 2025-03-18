@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { reactive, ref } from 'vue';
-import { getConferenceInfoAPI, getShareConferenceInfoAPI } from '@/api/conference';
+import { getConferenceInfoAPI, getShareConferenceInfoAPI, uploadConferenceSpeechAPI, getConferenceSpeechAPI } from '@/api/conference';
+
 import { useRoute } from 'vue-router';
 import router from '@/router';
 
@@ -43,11 +44,12 @@ export const useConferenceStore = defineStore('conference', () => {
     startConferenceInfo.value.mdContent = JSON.parse(res.data.mdContent);
   }
 
+
   return {
     conferenceInfo,
     getShareConferenceInfo,
     correctConferenceId,
     startConferenceInfo,
-    getStartConferenceInfo
+    getStartConferenceInfo,
   }
 })

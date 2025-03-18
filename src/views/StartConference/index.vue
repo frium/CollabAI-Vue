@@ -8,7 +8,8 @@ conferenceStore.getStartConferenceInfo();
 
 <template>
   <div class="head">
-    <h2>{{ '会议主题: ' + (conferenceStore.startConferenceInfo.title ? conferenceStore.startConferenceInfo.title : "") }}
+    <h2>
+      {{ '会议主题: ' + (conferenceStore.startConferenceInfo.title ? conferenceStore.startConferenceInfo.title : "") }}
     </h2>
     <OperationMenu v-if="conferenceStore.startConferenceInfo.title"></OperationMenu>
   </div>

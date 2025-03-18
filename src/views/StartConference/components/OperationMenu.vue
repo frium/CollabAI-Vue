@@ -1,14 +1,17 @@
 <script setup>
 import { getMyAuthAPI, startConferenceAPI, stopConferenceAPI } from '@/api/conference';
 import { useConferenceStore } from '@/stores/conferenceStore';
+import { usePcmStore } from '@/stores/pcmDataStore';
 import { ArrowDown } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus';
-import { computed, onMounted, ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useRoute } from 'vue-router';
+
 const route = useRoute();
 const router = useRouter();
 const myAuth = ref(-1);
+const recordStatus = ref(false);
 
 onMounted(async () => {
   const authRes = await getMyAuthAPI(route.params.startConferenceId);
@@ -30,7 +33,7 @@ const getStatus = () => {
   }
 }
 const conferenceStore = useConferenceStore();
-console.log(conferenceStore.startConferenceInfo.startTime);
+
 const status = ref(-1);
 
 const startConference = async () => {
@@ -42,6 +45,15 @@ const endConference = async () => {
   await stopConferenceAPI(route.params.startConferenceId);
   ElMessage.success('会议已经结束!');
   status.value = -1;
+}
+const pcmStore = usePcmStore();
+const handleStartAIRecording = () => {
+  if (!recordStatus.value) {
+    pcmStore.startRecording();
+  } else {
+    pcmStore.stopRecording();
+  }
+  recordStatus.value = !recordStatus.value;
 }
 </script>
 
@@ -70,8 +82,11 @@ const endConference = async () => {
           </el-dropdown-item>
           <el-dropdown-item v-if="(myAuth === 1 || myAuth === 2) && status === 1"
             @click="startConference">立即开始</el-dropdown-item>
-          <el-dropdown-item v-else-if="(myAuth === 1 || myAuth === 2) && status === 2"
-            @click="endConference">立即结束</el-dropdown-item>
+          <template v-else-if="(myAuth === 1 || myAuth === 2) && status === 2">
+            <el-dropdown-item @click="endConference">立即结束</el-dropdown-item>
+            <el-dropdown-item v-if="!recordStatus" @click="handleStartAIRecording">开启会议录音</el-dropdown-item>
+            <el-dropdown-item v-else @click="handleStartAIRecording">停止会议录音</el-dropdown-item>
+          </template>
           <el-dropdown-item v-else style="height: 0; padding: 0;"></el-dropdown-item>
         </el-dropdown-menu>
       </template>
