@@ -1,13 +1,12 @@
 <script setup>
 import { usePcmStore } from '@/stores/pcmDataStore';
-
+import LiveScreen from './LiveScreen.vue';
 const pcmStore = usePcmStore();
-
-
 
 </script>
 
 <template>
+  <LiveScreen></LiveScreen>
   <div class="conference-ai">
     <div class="personal-voice-info">
       <h3>会议录音</h3>

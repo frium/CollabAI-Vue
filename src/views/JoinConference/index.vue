@@ -17,7 +17,8 @@ onBeforeMount(async () => {
   isConferenceInfoLoaded.value = true;
 });
 const joinConference = async () => {
-  await joinConferenceAPI(conferenceId.value);
+  if (route.params.conferenceId) await joinConferenceAPI(route.params.conferenceId);
+  else await joinConferenceAPI(conferenceId.value);
   ElMessage.success('加入会议成功');
   router.push({ name: "home" })
 }
