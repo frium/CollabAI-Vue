@@ -216,7 +216,7 @@ onMounted(async () => {
 <template>
   <div class="live-screen">
     <el-dropdown trigger="click" class="function-nav">
-      <img src="@/assets/icons/setting.svg" alt="">
+      <img src="@/assets/icons/setting2.svg" alt="">
       <template #dropdown>
         <el-dropdown-menu>
           <el-dropdown-item>
@@ -249,8 +249,8 @@ onMounted(async () => {
 
   .function-nav {
     position: absolute;
-    top: 10px;
-    right: 10px;
+    top: 12px;
+    right: 15px;
 
 
     &:hover {
