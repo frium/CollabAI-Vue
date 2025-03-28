@@ -1,7 +1,7 @@
 
 /**
  * 获取本地媒体数据流
- * @param {MediaStreamConstraints} constraints 
+ * @param {MediaStreamConstraints} constraints
  */
 export const getLocalMediaStream = async (constraints) => {
   try {
@@ -13,7 +13,7 @@ export const getLocalMediaStream = async (constraints) => {
 }
 /**
  * 获取本地共享屏幕数据流
- * @param {MediaStreamConstraints} constraints 
+ * @param {MediaStreamConstraints} constraints
  */
 export const getLocalScreenMediaStream = async (constraints) => {
   try {
@@ -24,9 +24,9 @@ export const getLocalScreenMediaStream = async (constraints) => {
   }
 }
 /**
- * 
- * @param {HTMLVideoElement} ele 
- * @param {MediaProvider } stream 
+ *
+ * @param {HTMLVideoElement} ele
+ * @param {MediaProvider } stream
  */
 export const setLocalVideoStream = (ele, newStream) => {
   if (ele) {
@@ -43,9 +43,9 @@ export const setLocalVideoStream = (ele, newStream) => {
   }
 }
 /**
- * 
- * @param {HTMLVideoElement} ele 
- * @param {*} track 
+ *
+ * @param {HTMLVideoElement} ele
+ * @param {*} track
  */
 export const setRemoteVideoStream = (ele, track) => {
   if (ele) {
@@ -73,9 +73,9 @@ export const createPeerConnection = () => {
   return peer;
 }
 /**
- * 
- * @param {number} count 
- * @returns 
+ *
+ * @param {number} count
+ * @returns
  */
 export const createVideoEle = (count) => {
   let video_container = document.querySelector(".video-container");

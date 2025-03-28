@@ -28,6 +28,7 @@ const pcmStore = usePcmStore();
   margin: auto;
   box-shadow: 2px 5px 10px 3px rgba(0, 0, 0, 0.2);
   padding: 15px 0px;
+  margin-top: 20px;
 
   .personal-voice-info {
     flex-basis: 50%;

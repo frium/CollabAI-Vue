@@ -2,10 +2,12 @@
 import { ref, onMounted } from 'vue'
 import { createPeerConnection, createVideoEle, getLocalMediaStream, getLocalScreenMediaStream, setLocalVideoStream, setRemoteVideoStream } from "@/utils/common.js";
 import io from 'socket.io-client';
+import { ElMessage } from 'element-plus';
+import { useRoute } from 'vue-router';
+import { useUserStore } from '@/stores/userStore';
 
-// 使用 ref 引用 DOM 元素
-const roomInput = ref(null)
-const userInput = ref(null);
+const route = useRoute();
+const userStore = useUserStore();
 const startBtn = ref(null);
 const stopBtn = ref(null);
 const videoBtn = ref(null);
@@ -19,12 +21,14 @@ let isStopVideo = false;
 
 
 onMounted(async () => {
-  let localStream = await getLocalMediaStream({ video: true, audio: true });
-  setLocalVideoStream(offerVideo.value, localStream);
+  let roomId = route.params.statConferenceId;
+  let userId = userStore.userInfo.username;
+  let client;
+  let localStream;
   startBtn.value.addEventListener('click', async () => {
-    let roomId = roomInput.value.value;
-    let userId = userInput.value.value;
-
+    offerVideo.value.style.display = "block";
+    localStream = await getLocalMediaStream({ video: true, audio: true });
+    setLocalVideoStream(offerVideo.value, localStream);
     let isInit = false;
     const serverUrl = "wss://192.168.1.122:3333";
     const options = {
@@ -35,7 +39,7 @@ onMounted(async () => {
         userId
       }
     }
-    let client = new io(serverUrl, options);
+    client = new io(serverUrl, options);
     client.on("connect", () => {
       console.log("Connection successful!");
     })
@@ -51,18 +55,14 @@ onMounted(async () => {
     client.on('user-id-list-msg', async (userIdList) => {
       roomUserIdList = userIdList;
       connectingUserIdList = roomUserIdList.filter(item => item !== userId);
-      // console.log(connectingUserIdList);
       for (let id of connectingUserIdList) {
         let peer = peerMap.get(id);
         if (!peer) {
           peer = createPeerConnection();
           peer.createDataChannel("data-channel")
           peerMap.set(id, peer)
-          /**
-           * @param {RTCPeerConnectionIceEvent} event
-           */
+
           peer.onicecandidate = (event) => {
-            // console.log("candidate");
             if (event.candidate) {
               client.emit("candidate-msg", {
                 fromUserId: userId,
@@ -71,16 +71,10 @@ onMounted(async () => {
               })
             }
           }
-          /**
-           * @param {RTCTrackEvent} event
-           */
+
           peer.ontrack = (event) => {
             let videoEle = createVideoEle(id);
-            setRemoteVideoStream(videoEle, event.track)
-          }
-          peer.ondatachannel = (e) => {
-            console.log("DataChannel is created");
-            // console.log("ondatachannel", e);
+            setRemoteVideoStream(videoEle, event.track);
           }
           localStream.getTracks().forEach(track => {
             peer.addTrack(track, localStream)
@@ -101,10 +95,6 @@ onMounted(async () => {
     client.on('offer-sdp-msg', async (data) => {
       let { fromUserId, toUserId, sdp } = data
       if (userId === toUserId) {
-        console.log(connectingUserIdList, fromUserId, "offer");
-        /**
-         * @type {RTCPeerConnection}
-         */
         let peer = peerMap.get(fromUserId);
         if (peer) {
           await peer.setRemoteDescription(sdp)
@@ -121,38 +111,55 @@ onMounted(async () => {
     client.on('answer-sdp-msg', async (data) => {
       let { fromUserId, toUserId, sdp } = data;
       if (userId === toUserId) {
-        console.log(connectingUserIdList, fromUserId, "answer");
-        /**
-        * @type {RTCPeerConnection}
-        */
         let peer = peerMap.get(fromUserId);
         if (peer) {
           await peer.setRemoteDescription(sdp);
         }
       }
     })
-    // 交换candiate信息
+
     client.on('candidate-msg', async (data) => {
       let { fromUserId, toUserId, candidate } = data
       if (userId === toUserId) {
-        // console.log(connectingUserIdList, fromUserId, "candidate");
-        /**
-          * @type {RTCPeerConnection}
-          */
         let peer = peerMap.get(fromUserId);
         if (peer) {
           await peer.addIceCandidate(candidate)
         }
       }
     })
-    client.on('client-leave', (data) => {
-      console.log(data);
+    client.on('client-leave', (userId) => {
+      const video = document.getElementById("video" + userId)
+      if (video) video.parentElement.removeChild(video);
+    })
+
+    client.on('remove-viedo', (userId) => {
+      const video = document.getElementById("video" + userId);
+      if (video) video.style.display = 'none';
+      ElMessage.warning(userId + '关闭了会议共享!')
+
+    })
+
+    client.on('open-video', (userId) => {
+      const video = document.getElementById("video" + userId)
+      if (video) video.style.display = 'block'
+      ElMessage.success(userId + '打开了会议共享!')
     })
   });
 
   stopBtn.value.addEventListener("click", () => {
     isStopAudio = !isStopAudio;
     isStopVideo = !isStopVideo;
+    if (isStopAudio) {
+      offerVideo.value.style.display = 'none';
+      client.emit('stop', userId)
+      ElMessage.success("退出通话成功!")
+    }
+    else {
+      offerVideo.value.style.display = 'block';
+      client.emit('open', userId)
+      ElMessage.success("加入通话成功!")
+    }
+
     for (let id of connectingUserIdList) {
       let peer = peerMap.get(id);
       if (peer) {
@@ -169,6 +176,7 @@ onMounted(async () => {
     })
     if (newStream) {
       localStream = newStream;
+      ElMessage.success('切换视频通话成功!');
       setLocalVideoStream(offerVideo.value, localStream);
       localStream.getVideoTracks().forEach(track => {
         for (let id of connectingUserIdList) {
@@ -187,9 +195,10 @@ onMounted(async () => {
         displaySurface: 'application' | 'browser' | 'monitor' | 'window'
       }
     });
+    ElMessage.success('切换屏幕共享成功!');
     if (newStream) {
       localStream = newStream;
-      setLocalVideoStream(offerVideo, localStream);
+      setLocalVideoStream(offerVideo.value, localStream);
       localStream.getVideoTracks().forEach(track => {
         for (let id of connectingUserIdList) {
           let peer = peerMap.get(id);
@@ -200,40 +209,78 @@ onMounted(async () => {
       })
     }
   })
-
-
 })
 
 </script>
 
 <template>
-  <div style="width: 1000px; height: 1000px; background: goldenrod;">
-    <input ref="roomInput" id="roomId" type="text" value="会议房间1" placeholder="请输入房间号" />
-    <input ref="userInput" id="userId" type="text" value="123" placeholder="请输入用户昵称" />
-    <button ref="startBtn" class="startBtn">开始通话</button>
-    <button ref="stopBtn" class="stopBtn">暂停/恢复通话</button>
-    <button ref="videoBtn" class="videoBtn">视频通话</button>
-    <button ref="screenBtn" class="screenBtn">屏幕共享</button>
+  <div class="live-screen">
+    <el-dropdown trigger="click" class="function-nav">
+      <img src="@/assets/icons/setting.svg" alt="">
+      <template #dropdown>
+        <el-dropdown-menu>
+          <el-dropdown-item>
+            <button ref="startBtn" class="button-item">加入视频会议</button>
+          </el-dropdown-item>
+          <el-dropdown-item>
+            <button ref="stopBtn" class="button-item">暂停/恢复通话</button>
+          </el-dropdown-item>
+          <el-dropdown-item>
+            <button ref="videoBtn" class="button-item">视频通话</button>
+          </el-dropdown-item>
+          <el-dropdown-item>
+            <button ref="screenBtn" class="button-item">屏幕共享</button>
+          </el-dropdown-item>
+        </el-dropdown-menu>
+      </template>
+    </el-dropdown>
     <div class="video-container">
-      <video ref="offerVideo" autoplay controls muted></video>
-      <!-- 确保这里使用 ref 而不是 id -->
+      <video ref="offerVideo" autoplay controls muted style="display: none;"></video>
     </div>
   </div>
 </template>
 <style scoped lang="scss">
-.video-container {
+.live-screen {
+  position: relative;
   width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  align-items: center;
-  border: 1px dashed pink;
-}
+  min-height: 650px;
+  background-color: rgba(196, 196, 196, 0.75);
+  user-select: none;
 
-.video-container video {
-  border: 1px dashed pink;
-  width: 35%;
-  height: 35%;
+  .function-nav {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+
+
+    &:hover {
+      img {
+        transform: rotate(180deg);
+      }
+    }
+
+    img {
+      width: 26px;
+      margin: auto;
+      transition: transform 0.2s;
+    }
+  }
+
+  .video-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 3%;
+  }
+
+}
+</style>
+
+<style>
+.live-screen .video-container video {
+  width: 31%;
+  height: 46%;
 }
 </style>
