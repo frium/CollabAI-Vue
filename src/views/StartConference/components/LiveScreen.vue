@@ -5,8 +5,10 @@ import io from 'socket.io-client';
 import { ElMessage } from 'element-plus';
 import { useRoute } from 'vue-router';
 import { useUserStore } from '@/stores/userStore';
+import { usePcmStore } from '@/stores/pcmDataStore';
 
 const route = useRoute();
+const pcmStroe = usePcmStore();
 const userStore = useUserStore();
 const startBtn = ref(null);
 const stopBtn = ref(null);
@@ -18,7 +20,7 @@ let roomUserIdList;
 let connectingUserIdList = [];
 let isStopAudio = false;
 let isStopVideo = false;
-
+let audioStream = null;
 
 onMounted(async () => {
   let roomId = route.params.statConferenceId;
@@ -29,6 +31,8 @@ onMounted(async () => {
     offerVideo.value.style.display = "block";
     localStream = await getLocalMediaStream({ video: true, audio: true });
     setLocalVideoStream(offerVideo.value, localStream);
+    audioStream = new MediaStream(localStream.getAudioTracks());
+    pcmStroe.startRecording(audioStream);
     let isInit = false;
     const serverUrl = "wss://192.168.1.122:3333";
     const options = {
@@ -151,12 +155,14 @@ onMounted(async () => {
     isStopVideo = !isStopVideo;
     if (isStopAudio) {
       offerVideo.value.style.display = 'none';
-      client.emit('stop', userId)
+      client.emit('stop', userId);
+      pcmStroe.stopRecording();
       ElMessage.success("退出通话成功!")
     }
     else {
       offerVideo.value.style.display = 'block';
-      client.emit('open', userId)
+      client.emit('open', userId);
+      pcmStroe.startRecording(audioStream);
       ElMessage.success("加入通话成功!")
     }
 

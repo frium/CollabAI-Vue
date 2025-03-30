@@ -3,7 +3,6 @@ import { usePcmStore } from '@/stores/pcmDataStore';
 import LiveScreen from './LiveScreen.vue';
 const pcmStore = usePcmStore();
 
-
 </script>
 
 <template>
@@ -35,7 +34,7 @@ const pcmStore = usePcmStore();
   .personal-voice-info {
     flex-basis: 50%;
     border-right: 1px solid #b7b5b5;
-    max-height: 1500px;
+    overflow: auto;
     padding: 5px 20px;
   }
 
@@ -44,7 +43,6 @@ const pcmStore = usePcmStore();
     max-height: 1500px;
     padding: 5px 20px;
   }
-
 
 }
 </style>

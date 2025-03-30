@@ -1,8 +1,5 @@
 
-/**
- * 获取本地媒体数据流
- * @param {MediaStreamConstraints} constraints
- */
+
 export const getLocalMediaStream = async (constraints) => {
   try {
     let stream = await navigator.mediaDevices.getUserMedia(constraints)
@@ -11,10 +8,7 @@ export const getLocalMediaStream = async (constraints) => {
     console.log("error", error);
   }
 }
-/**
- * 获取本地共享屏幕数据流
- * @param {MediaStreamConstraints} constraints
- */
+
 export const getLocalScreenMediaStream = async (constraints) => {
   try {
     let stream = await navigator.mediaDevices.getDisplayMedia(constraints)
@@ -23,11 +17,7 @@ export const getLocalScreenMediaStream = async (constraints) => {
     console.log("error", error);
   }
 }
-/**
- *
- * @param {HTMLVideoElement} ele
- * @param {MediaProvider } stream
- */
+
 export const setLocalVideoStream = (ele, newStream) => {
   if (ele) {
     let stream = ele.srcObject;
@@ -42,11 +32,7 @@ export const setLocalVideoStream = (ele, newStream) => {
     ele.srcObject = newStream
   }
 }
-/**
- *
- * @param {HTMLVideoElement} ele
- * @param {*} track
- */
+
 export const setRemoteVideoStream = (ele, track) => {
   if (ele) {
     let stream = ele.srcObject;
@@ -65,7 +51,6 @@ export const createPeerConnection = () => {
   const peer = new RTCPeerConnection({
     bundlePolicy: "max-bundle",
     rtcpMuxPolicy: "require",
-    // iceTransportPolicy: 'relay',// 强制服务器转发
     iceServers: [
       { urls: "stun:stun.l.google.com:19302" }
     ]

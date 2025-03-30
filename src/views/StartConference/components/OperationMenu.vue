@@ -11,7 +11,6 @@ import { useRoute } from 'vue-router';
 const route = useRoute();
 const router = useRouter();
 const myAuth = ref(-1);
-const recordStatus = ref(false);
 
 onMounted(async () => {
   const authRes = await getMyAuthAPI(route.params.startConferenceId);
@@ -47,14 +46,7 @@ const endConference = async () => {
   status.value = -1;
 }
 const pcmStore = usePcmStore();
-const handleStartAIRecording = () => {
-  if (!recordStatus.value) {
-    pcmStore.startRecording();
-  } else {
-    pcmStore.stopRecording();
-  }
-  recordStatus.value = !recordStatus.value;
-}
+
 </script>
 
 <template>
@@ -84,8 +76,6 @@ const handleStartAIRecording = () => {
             @click="startConference">立即开始</el-dropdown-item>
           <template v-else-if="(myAuth === 1 || myAuth === 2) && status === 2">
             <el-dropdown-item @click="endConference">立即结束</el-dropdown-item>
-            <el-dropdown-item v-if="!recordStatus" @click="handleStartAIRecording">开启会议录音</el-dropdown-item>
-            <el-dropdown-item v-else @click="handleStartAIRecording">停止会议录音</el-dropdown-item>
           </template>
           <el-dropdown-item v-else style="height: 0; padding: 0;"></el-dropdown-item>
         </el-dropdown-menu>

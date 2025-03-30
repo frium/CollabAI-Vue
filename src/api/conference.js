@@ -114,4 +114,8 @@ export const getConferenceSpeechAPI = (conferenceId) => {
   })
 }
 
-
+export const getAISummaryAPI = (conferenceId) => {
+  return request({
+    url: `/sync/${conferenceId}`,
+  })
+}
