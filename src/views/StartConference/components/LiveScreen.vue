@@ -1,11 +1,12 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed, onUnmounted } from 'vue'
 import { createPeerConnection, createVideoEle, getLocalMediaStream, getLocalScreenMediaStream, setLocalVideoStream, setRemoteVideoStream } from "@/utils/common.js";
 import io from 'socket.io-client';
 import { ElMessage } from 'element-plus';
 import { useRoute } from 'vue-router';
 import { useUserStore } from '@/stores/userStore';
 import { usePcmStore } from '@/stores/pcmDataStore';
+import { useConferenceStore } from '@/stores/conferenceStore';
 
 const route = useRoute();
 const pcmStroe = usePcmStore();
@@ -22,7 +23,18 @@ let isStopAudio = false;
 let isStopVideo = false;
 let audioStream = null;
 
+const conferenceStore = useConferenceStore();
+
+const status = computed(() => {
+  const now = new Date();
+  const startTime = new Date(conferenceStore.startConferenceInfo.startTime);
+  const endTime = new Date(conferenceStore.startConferenceInfo.endTime);
+  return now >= startTime && now <= endTime;
+});
+
 onMounted(async () => {
+  if (!status) return;
+  pcmStroe.getResult();
   let roomId = route.params.statConferenceId;
   let userId = userStore.userInfo.username;
   let client;
@@ -44,18 +56,6 @@ onMounted(async () => {
       }
     }
     client = new io(serverUrl, options);
-    client.on("connect", () => {
-      console.log("Connection successful!");
-    })
-    client.on("disconnect", () => {
-      console.log("Connection disconnect!");
-    })
-    client.on("error", () => {
-      console.log("Connection error!");
-    })
-    client.on('room-msg', (data) => {
-      console.log(data);
-    })
     client.on('user-id-list-msg', async (userIdList) => {
       roomUserIdList = userIdList;
       connectingUserIdList = roomUserIdList.filter(item => item !== userId);
@@ -217,10 +217,13 @@ onMounted(async () => {
   })
 })
 
+onUnmounted(() => {
+  pcmStroe.stopRecording();
+})
 </script>
 
 <template>
-  <div class="live-screen">
+  <div class="live-screen" v-if="status">
     <el-dropdown trigger="click" class="function-nav">
       <img src="@/assets/icons/setting2.svg" alt="">
       <template #dropdown>

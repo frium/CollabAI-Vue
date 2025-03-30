@@ -1,9 +1,14 @@
 <script setup>
 import OperationMenu from './components/OperationMenu.vue';
 import { useConferenceStore } from '@/stores/conferenceStore';
+import { onMounted } from 'vue';
 
 const conferenceStore = useConferenceStore();
-conferenceStore.getStartConferenceInfo();
+onMounted(async () => {
+  await conferenceStore.getStartConferenceInfo();
+
+})
+
 </script>
 
 <template>
@@ -14,7 +19,7 @@ conferenceStore.getStartConferenceInfo();
     <OperationMenu v-if="conferenceStore.startConferenceInfo.title"></OperationMenu>
   </div>
   <div style=" margin:  10px 0;">
-    <RouterView></RouterView>
+    <RouterView v-if="conferenceStore.startConferenceInfo.title"></RouterView>
   </div>
 </template>
 

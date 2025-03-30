@@ -1,11 +1,10 @@
 import { defineStore } from 'pinia';
 import { getConferenceSpeechAPI, uploadConferenceSpeechAPI } from '@/api/conference';
-import { ref, onBeforeUnmount } from 'vue';
+import { ref } from 'vue';
 import { useRoute } from 'vue-router';
 
 export const usePcmStore = defineStore('pcm', () => {
   const route = useRoute();
-  const isRecording = ref(false);
   const result = ref('');
   const SEND_INTERVAL = 100;
   let sendInterval;
@@ -20,6 +19,10 @@ export const usePcmStore = defineStore('pcm', () => {
     }, 1000);
   };
 
+  const getOneResult = async () => {
+    const res = await getConferenceSpeechAPI(route.params.startConferenceId);
+    result.value = res.data.speechText;
+  }
   class PCMRecorder {
     constructor(audioContext) {
       this.buffers = [];
@@ -84,38 +87,34 @@ export const usePcmStore = defineStore('pcm', () => {
     }
   }
 
-  onBeforeUnmount(() => {
-    if (isRecording.value) {
-      stopRecording();
-    }
-  });
-
   const startRecording = (stream) => {
     audioContext = new (window.AudioContext || window.webkitAudioContext)();
     recorder = new PCMRecorder(audioContext);
     recorder.start(stream);
-    isRecording.value = true;
     sendInterval = setInterval(async () => {
       const audioData = recorder.getAudioData();
       if (audioData) {
         await uploadConferenceSpeechAPI(route.params.startConferenceId, audioData);
       }
     }, SEND_INTERVAL);
-    getResult();
   };
-
-  const stopRecording = () => {
-    if (isRecording.value) {
-      clearInterval(sendInterval);
+  const stopGetResult = () => {
+    if (getInterval) {
       clearInterval(getInterval);
-      recorder.stop();
-      isRecording.value = false;
     }
+  }
+  const stopRecording = () => {
+    if (sendInterval) clearInterval(sendInterval);
+    if (getInterval) clearInterval(getInterval);
+    if (recorder) recorder.stop();
   };
 
   return {
     startRecording,
     stopRecording,
+    getResult,
+    stopGetResult,
+    getOneResult,
     result
   };
 });

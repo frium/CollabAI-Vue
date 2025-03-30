@@ -1,8 +1,58 @@
 <script setup>
 import { usePcmStore } from '@/stores/pcmDataStore';
+import { computed, onMounted, onUnmounted, ref } from 'vue';
 import LiveScreen from './LiveScreen.vue';
-const pcmStore = usePcmStore();
+import MarkdownViewer from './MarkdownViewer.vue';
+import { getAISummaryAPI } from '@/api/conference';
+import { useRoute } from 'vue-router';
+import { useConferenceStore } from '@/stores/conferenceStore';
 
+const route = useRoute();
+const pcmStore = usePcmStore();
+const mdContent = ref('');
+const intervalId = ref(null);
+const conferenceStore = useConferenceStore();
+const startFetching = () => {
+  if (!intervalId.value) {
+    intervalId.value = setInterval(async () => {
+      try {
+        const res = await getAISummaryAPI(route.params.startConferenceId);
+        mdContent.value = res.data.aiSummary;
+      } catch (error) {
+        stopFetching();
+      }
+    }, 1000);
+  }
+};
+
+const stopFetching = () => {
+  if (intervalId.value) {
+    clearInterval(intervalId.value);
+    intervalId.value = null;
+  }
+};
+
+const status = computed(() => {
+  const now = new Date();
+  const startTime = new Date(conferenceStore.startConferenceInfo.startTime);
+  const endTime = new Date(conferenceStore.startConferenceInfo.endTime);
+  return now >= startTime && now <= endTime;
+});
+
+
+onMounted(async () => {
+  console.log(status);
+
+  if (!status) {
+    pcmStore.getOneResult();
+    const res = await getAISummaryAPI(route.params.startConferenceId);
+    mdContent.value = res.data.aiSummary;
+  } else {
+    startFetching();
+  }
+});
+
+onUnmounted(stopFetching);
 </script>
 
 <template>
@@ -15,6 +65,8 @@ const pcmStore = usePcmStore();
       </div>
       <div class="ai-voice-info">
         <h3>实时ai总结</h3>
+        <MarkdownViewer class="markdown" :source="mdContent" :line-numbers="true">
+        </MarkdownViewer>
       </div>
     </div>
   </div>
@@ -32,15 +84,15 @@ const pcmStore = usePcmStore();
   margin-top: 20px;
 
   .personal-voice-info {
-    flex-basis: 50%;
+    flex-basis: 42%;
     border-right: 1px solid #b7b5b5;
     overflow: auto;
     padding: 5px 20px;
   }
 
   .ai-voice-info {
-    flex-basis: 50%;
-    max-height: 1500px;
+    flex-basis: 58%;
+    overflow: auto;
     padding: 5px 20px;
   }
 

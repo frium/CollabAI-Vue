@@ -62,8 +62,6 @@ const affirmDelete = async () => {
 const selectedIndexes = ref([]);
 
 const handleDeleteAllSelected = () => {
-  console.log(selectedIndexes.value[0].userId);
-
   if (selectedIndexes.value[0].authType === 1) {
     ElMessage.error('不能删除创建者!');
     return;

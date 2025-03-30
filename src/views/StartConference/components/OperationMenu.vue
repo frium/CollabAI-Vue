@@ -21,8 +21,6 @@ const getStatus = () => {
   const now = new Date();
   const startTime = new Date(conferenceStore.startConferenceInfo.startTime);
   const endTime = new Date(conferenceStore.startConferenceInfo.endTime);
-  console.log(endTime);
-
   if (now < startTime) {
     return 1;
   } else if (now < endTime) {
@@ -45,8 +43,6 @@ const endConference = async () => {
   ElMessage.success('会议已经结束!');
   status.value = -1;
 }
-const pcmStore = usePcmStore();
-
 </script>
 
 <template>
