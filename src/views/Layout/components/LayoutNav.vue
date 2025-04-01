@@ -1,22 +1,25 @@
 <script setup>
+import { getAITokenAPI } from '@/api/ai';
 import PersonalCard from '@/views/PersonalCenter/components/PersonalCard.vue';
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 
 const iframeBigAi = ref(null);
 const showBigAI = () => {
   iframeBigAi.value.style.width = iframeBigAi.value.style.width === '0px' ? '100%' : '0px';
 }
+const AIToken = ref('');
+onMounted(async () => {
+  const res = await getAITokenAPI();
+  AIToken.value = "https://www.das-ai.com/dasChat?token=" + res.data;
+})
 </script>
 
 <template>
-  <iframe ref="iframeBigAi"
-    src="https://www.das-ai.com/dasChat?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiICAgIFwidGVuYW50SWRcIjogMTg3NzU5NjQ3ODQwNzQ0NjUyOVxufSIsImlhdCI6MTc0MzE2NTE0MCwianRpIjoiNmY1ZjM1NjctMjhiNi00YTVkLTllOTEtMDQyNTAxNjZkMDZmIn0.JIDAdMasTu_HDZ4v0UxgDX0Q1X0WerPR1HIoAAuik18"
-    class="big-ai" frameborder="0"></iframe>
+  <iframe ref="iframeBigAi" :src="AIToken" class="big-ai" frameborder="0"></iframe>
   <div class="home-layout-nav">
     <RouterLink :to="{ name: 'home' }">
-      <h2>CollabAI</h2>
+      <img style="width: 50px;margin-left: 15px;" src="/public/CollabAI.svg" alt="">
     </RouterLink>
-
     <ul class="home-layout-nav-ul">
       <li>
         <button class="ai-assistant" @click="showBigAI"> 小恒助理</button>

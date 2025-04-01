@@ -119,3 +119,4 @@ export const getAISummaryAPI = (conferenceId) => {
     url: `/sync/${conferenceId}`,
   })
 }
+
