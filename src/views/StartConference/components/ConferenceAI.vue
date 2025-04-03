@@ -39,10 +39,25 @@ const status = computed(() => {
   return now >= startTime && now <= endTime;
 });
 
+const downloadMarkdown = () => {
+  const blob = new Blob([mdContent.value], { type: 'text/markdown' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${conferenceStore.startConferenceInfo.title}会议总结.md`;
+  document.body.appendChild(a);
+  a.addEventListener('click', function () {
+    setTimeout(() => {
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }, 5000);
+  }, { once: true });
+
+  document.body.appendChild(a);
+  a.click();
+}
 
 onMounted(async () => {
-  console.log(status);
-
   if (!status) {
     pcmStore.getOneResult();
     const res = await getAISummaryAPI(route.params.startConferenceId);
@@ -57,14 +72,18 @@ onUnmounted(stopFetching);
 
 <template>
   <div>
-    <LiveScreen></LiveScreen>
+    <LiveScreen v-if="status"></LiveScreen>
     <div class="conference-ai">
       <div class="personal-voice-info">
-        <h3>会议录音</h3>
-        <p v-for="(text, index) in pcmStore.result" :key="index">{{ text }}</p>
+        <h3 style="margin-bottom: 10px;">会议录音</h3>
+        <p style="letter-spacing: 1px; line-height: 1.8; " v-for="(text, index) in pcmStore.result" :key="index">{{ text
+          }}</p>
       </div>
       <div class="ai-voice-info">
-        <h3>实时ai总结</h3>
+        <div style="display: flex; justify-content: space-between;">
+          <h3>实时ai总结</h3>
+          <el-button type="text" @click="downloadMarkdown" style="margin-right: 20px;">导出</el-button>
+        </div>
         <MarkdownViewer class="markdown" :source="mdContent" :line-numbers="true">
         </MarkdownViewer>
       </div>

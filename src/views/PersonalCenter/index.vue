@@ -264,7 +264,7 @@ const updateEmail = async (event) => {
             <div class="content-show-l">签名</div>
             <div class="content-show-r">{{ info }}</div>
             <div class="info-input">
-              <el-input v-model="userStore.userInfo.info" style="width: 240px; margin-right: 30px ;" placeholder="请输入内容"
+              <el-input v-model="userStore.userInfo.info" style="width: 500px; margin-right: 30px ;" placeholder="请输入内容"
                 type="textarea" maxlength="80" show-word-limit />
               <el-button type="primary" @click="commit">确认</el-button>
               <el-button type="danger" @click="cancle">取消</el-button>
@@ -462,7 +462,7 @@ const updateEmail = async (event) => {
           }
 
           .content-show-r {
-            max-width: 720px;
+            max-width: 700px;
             white-space: nowrap;
             word-break: break-all;
             -webkit-box-orient: vertical;

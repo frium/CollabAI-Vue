@@ -1,4 +1,7 @@
 <script setup>
+const text = `CollabAI智能会议助手—让会议更高效，协作更轻松 \n\n
+CollabAI能实时记录会议内容，并智能提炼关键讨论、决策和待办事项，自动生成清晰简洁的会议总结。支持中/英语言识别和发言人区分，确保信息准确无误。会后一键生成结构化会议纪要，并支持内容导出，
+大幅提升团队协作效率。无论是远程会议还是跨国沟通，都能帮助团队节省时间、减少信息遗漏，让每一次会议都更有价值。——专注会议效率，释放生产力！`;
 </script>
 
 <template>
@@ -11,9 +14,16 @@
         borderRight: '2px solid rgba(181, 159, 159, 0.3)'
       }">
         <div class="describe">
-          <h2 class="title">CollabAI</h2>
-          <p>
-            你说的对，但是《必蓝档案》是阿罗娜研发的一款全新游戏抽卡。故事发生在一个被称作「募集」的抽卡世界里，在这里被阿罗娜选中的人将被授予「九蓝一金」，引导非酋之力。你将扮演一位名为「sensei」的神秘角色，在卡池中歪出性格各异、能力独特的学生，和她们一起吃井，寻找不存在的「出货」，逐步发掘「前程四井」的真相。
+          <div style="display: flex; align-items: center; margin-bottom: 10px;">
+            <h2 class="title" style="line-height: 1.8;">CollabAI</h2>
+            <h3 style="margin-left: 10px; line-height: 1.8;text-align: right;">让会议更高效，协作更轻松</h3>
+          </div>
+          <p style="letter-spacing: 1px; line-height: 1.8;  text-indent: 2em;">
+            CollabAI能实时记录会议内容，并智能提炼关键讨论、决策和待办事项，自动生成清晰简洁的会议总结。支持中/英语言识别和发言人区分，确保信息准确无误。会后一键生成结构化会议纪要，并支持内容导出，
+            大幅提升团队协作效率。无论是远程会议还是跨国沟通，都能帮助团队节省时间、减少信息遗漏，让每一次会议都更有价值
+          </p>
+          <p style=" width: 100% ;letter-spacing: 1px; margin: 10px 0; text-align: right">
+            ——专注会议效率，释放生产力！
           </p>
         </div>
       </div>
@@ -46,7 +56,7 @@
     overflow: hidden;
 
     .describe {
-      width: 70%;
+      width: 75%;
       margin-top: 70px;
     }
   }
