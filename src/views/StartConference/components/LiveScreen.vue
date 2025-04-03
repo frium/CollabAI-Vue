@@ -46,7 +46,7 @@ onMounted(async () => {
     audioStream = new MediaStream(localStream.getAudioTracks());
     pcmStroe.startRecording(audioStream);
     let isInit = false;
-    const serverUrl = "wss://192.168.1.122:3333";
+    const serverUrl = "wss://frium.top:3333";
     const options = {
       reconnectDelayMat: 10000,
       transports: ["websocket"],
