@@ -87,7 +87,7 @@ const rtEditorStore = useRTEditorStore();
 const submit = async () => {
   form.startTime = time.value[0];
   form.endTime = time.value[1];
-  form.mdContent = JSON.stringify(rtEditorStore.content);
+  form.mdContent = rtEditorStore.content;
   await createConferenceAPI(form);
   ElMessage.success('预定成功!');
   router.push({ name: 'home' })

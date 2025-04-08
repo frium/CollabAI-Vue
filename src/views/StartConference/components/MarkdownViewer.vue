@@ -6,7 +6,7 @@
 import { nextTick, ref, watchEffect } from 'vue'
 import MarkdownIt from 'markdown-it'
 import hljs from 'highlight.js'
-import 'highlight.js/styles/atom-one-light.min.css'
+import 'highlight.js/styles/atom-one-dark.min.css'
 import multimdTable from 'markdown-it-multimd-table'
 
 
@@ -27,7 +27,6 @@ const md = new MarkdownIt({
   linkify: true,      // 自动转换URL为链接
   typographer: true,  // 优化排版
   highlight: function (str, lang) {
-    lang = lang ? lang : 'java';
     // 此处判断是否有添加代码语言
     if (lang && hljs.getLanguage(lang)) {
       try {
@@ -81,7 +80,6 @@ const md = new MarkdownIt({
           '</code></pre>'
       } catch (__) { }
     }
-
   }
 }).use(multimdTable)
 
@@ -91,12 +89,17 @@ const handleShowCode = (event) => {
   const targetCode = codeWrapper?.querySelector('pre code ol');
 
   if (targetCode.style.maxHeight === '0px') {
-    targetCode.style.maxHeight = '1000px';
-    svg.style.transform = 'rotate(0deg)';
-    targetCode.style.paddingBottom = '15px';
-    setTimeout(() => {
-      targetCode.style.overflow = 'auto';
-    }, 200)
+    targetCode.style.maxHeight = 'none';
+    const fullHeight = targetCode.scrollHeight + 'px';
+    targetCode.style.maxHeight = '0px';
+    requestAnimationFrame(() => {
+      targetCode.style.maxHeight = fullHeight;
+      svg.style.transform = 'rotate(0deg)';
+      targetCode.style.paddingBottom = '15px';
+      setTimeout(() => {
+        targetCode.style.overflow = 'auto';
+      }, 300);
+    });
   } else {
     targetCode.style.maxHeight = '0px';
     svg.style.transform = 'rotate(90deg)';
@@ -144,19 +147,70 @@ watchEffect(() => {
       svg.removeEventListener('click', handleCopyCode)
       svg.addEventListener('click', handleCopyCode)
     });
-
+    emit('component-loaded');
   })
 });
+
+const emit = defineEmits(['component-loaded']);
 
 </script>
 
 <style scoped lang="scss">
 #markdown-container {
+
   user-select: text;
   width: 100%;
   overflow-wrap: break-word;
   line-height: 1.6;
   display: flow-root;
+
+
+  :deep() {
+
+    /* 有序列表和无序列表样式 */
+    ul,
+    ol {
+      padding-left: 2em;
+      line-height: 1.6;
+
+      li {
+        margin-bottom: 0.5em;
+        position: relative;
+      }
+    }
+
+    /* 无序列表的圆点样式 */
+    ul {
+      list-style-type: disc;
+
+      ul {
+        list-style-type: circle;
+
+        ul {
+          list-style-type: square;
+        }
+      }
+    }
+
+    /* 有序列表的数字样式 */
+    ol {
+      list-style-type: decimal;
+
+      ol {
+        list-style-type: lower-alpha;
+
+        ol {
+          list-style-type: lower-roman;
+        }
+      }
+    }
+
+    /* 任务列表样式 */
+    .contains-task-list {
+      padding-left: 0;
+      list-style: none;
+    }
+  }
 
   :deep() {
     h1 {
@@ -179,7 +233,7 @@ watchEffect(() => {
     }
 
     a {
-      color: #f6cac9;
+      color: rgb(54, 167, 199);
       text-decoration: none;
 
       &:hover {
@@ -198,10 +252,11 @@ watchEffect(() => {
       counter-reset: line;
       padding: 10px 0 0 16px;
       border-radius: 6px;
-      background-color: #f0ecec;
-      border: 1px solid #e1e1e1;
+      margin-bottom: 15px;
 
       ol {
+        list-style-type: none;
+        padding: 0;
         transition: max-height 0.3s ease-in-out;
         padding-bottom: 15px;
         max-height: 1000px;
@@ -212,7 +267,7 @@ watchEffect(() => {
           display: inline-block;
           content: counter(line);
           counter-increment: line;
-          color: #000000;
+          color: #999;
           text-align: right;
           user-select: none;
           width: 20px;

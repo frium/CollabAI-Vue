@@ -68,6 +68,9 @@ importers:
       turndown:
         specifier: ^7.2.0
         version: 7.2.0
+      vditor:
+        specifier: ^3.10.9
+        version: 3.10.9
       vue:
         specifier: ^3.5.13
         version: 3.5.13
@@ -1084,6 +1087,9 @@ packages:
   destroy@1.2.0:
     resolution: {integrity: sha512-2sJGJTaXIIaR1w4iJSNoN0hnMY7Gpc/n8D4qSCJw8QqFWXf7cuAgnEHxBpweaVcPevC2l3KpjYCx3NypQQgaJg==, tarball: https://registry.npmmirror.com/destroy/-/destroy-1.2.0.tgz}
     engines: {node: '>= 0.8', npm: 1.2.8000 || >= 1.4.16}
+
+  diff-match-patch@1.0.5:
+    resolution: {integrity: sha512-IayShXAgj/QMXgB0IWmKx+rOPuGMhqm5w6jvFxmVenXKIzRqTAAsbBPT3kWQeGANj3jGgvcvv4yK6SxqYmikgw==, tarball: https://registry.npmmirror.com/diff-match-patch/-/diff-match-patch-1.0.5.tgz}
 
   dom7@3.0.0:
     resolution: {integrity: sha512-oNlcUdHsC4zb7Msx7JN3K0Nro1dzJ48knvBOnDPKJ2GV9wl1i5vydJZUSyOfrkKFDZEud/jBsTk92S/VGSAe/g==, tarball: https://registry.npmmirror.com/dom7/-/dom7-3.0.0.tgz}
@@ -2234,6 +2240,9 @@ packages:
     resolution: {integrity: sha512-BNGbWLfd0eUPabhkXUVm0j8uuvREyTh5ovRa/dyow/BqAbZJyC+5fU+IzQOzmAKzYqYRAISoRhdQr3eIZ/PXqg==, tarball: https://registry.npmmirror.com/vary/-/vary-1.1.2.tgz}
     engines: {node: '>= 0.8'}
 
+  vditor@3.10.9:
+    resolution: {integrity: sha512-cJE/pMv/kg3dW9TIoAe2VBM4CI1JuTEjsD8YhveqYZm8h4pjcXSmYtu/0QVqH6/KA2BeUXvZilryOXlwho2QZg==, tarball: https://registry.npmmirror.com/vditor/-/vditor-3.10.9.tgz}
+
   vite-hot-client@0.2.4:
     resolution: {integrity: sha512-a1nzURqO7DDmnXqabFOliz908FRmIppkBKsJthS8rbe8hBEXwEwe4C3Pp33Z1JoFCYfVL4kTOMLKk0ZZxREIeA==, tarball: https://registry.npmmirror.com/vite-hot-client/-/vite-hot-client-0.2.4.tgz}
     peerDependencies:
@@ -3356,6 +3365,8 @@ snapshots:
   depd@2.0.0: {}
 
   destroy@1.2.0: {}
+
+  diff-match-patch@1.0.5: {}
 
   dom7@3.0.0:
     dependencies:
@@ -4562,6 +4573,10 @@ snapshots:
   varint@6.0.0: {}
 
   vary@1.1.2: {}
+
+  vditor@3.10.9:
+    dependencies:
+      diff-match-patch: 1.0.5
 
   vite-hot-client@0.2.4(vite@6.1.1(@types/node@22.13.14)(sass-embedded@1.85.0)):
     dependencies:

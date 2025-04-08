@@ -4,7 +4,6 @@ import { useConferenceStore } from '@/stores/conferenceStore';
 import { computed, onMounted, ref } from 'vue';
 import MarkdownViewer from './MarkdownViewer.vue';
 import UserInfoCard from './UserInfoCard.vue';
-import TurndownService from 'turndown'
 import UpdateParticipants from './UpdateParticipants.vue';
 import { useRoute } from 'vue-router';
 
@@ -14,29 +13,14 @@ const showParticipants = ref(false);
 const mdContent = ref('');
 const myAuth = ref(-1);
 const route = useRoute();
-const turndown = new TurndownService({
-  codeBlockStyle: 'fenced',  // 强制使用 ``` 代码块
-  headingStyle: 'atx',       // 强制使用 # 标题
-  fence: '```',              // 明确指定围栏符
-  blankReplacement: (content, node) => {
-    return node.isBlock ? '\n\n' : '' // 处理空行
-  }
-});
-turndown.addRule('codeBlock', {
-  filter: ['pre'],
-  replacement: (content, node) => {
-    const code = node.querySelector('code')
-    const lang = code?.className.replace('language-', '') || ''
-    return `\n\`\`\`${lang}\n${code?.textContent}\n\`\`\`\n`
-  }
-})
+
 onMounted(async () => {
   if (!conferenceStore.startConferenceInfo.title) {
     await conferenceStore.getStartConferenceInfo();
   }
   const res = await getParticipantsAPI(conferenceStore.startConferenceInfo.id);
   participants.value = res.data.sort((a, b) => a.authType - b.authType);
-  mdContent.value = turndown.turndown(conferenceStore.startConferenceInfo.mdContent);
+  mdContent.value = conferenceStore.startConferenceInfo.mdContent;
   const authRes = await getMyAuthAPI(route.params.startConferenceId);
   myAuth.value = authRes.data.authType;
 });

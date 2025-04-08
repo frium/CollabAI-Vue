@@ -73,7 +73,7 @@ const uploadCoverImg = () => {
 const submit = async () => {
   form.value.startTime = time.value[0];
   form.value.endTime = time.value[1];
-  form.value.mdContent = JSON.stringify(rtEditorStore.content);
+  form.value.mdContent = rtEditorStore.content;
   await updateConferenceInfoAPI(form.value);
   ElMessage.success('修改成功!');
   conferenceStore.startConferenceInfo.mdContent = rtEditorStore.content;

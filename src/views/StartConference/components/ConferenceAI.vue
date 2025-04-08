@@ -76,8 +76,18 @@ onUnmounted(stopFetching);
     <div class="conference-ai">
       <div class="personal-voice-info">
         <h3 style="margin-bottom: 10px;">会议录音</h3>
-        <p style="letter-spacing: 1px; line-height: 1.8; " v-for="(text, index) in pcmStore.result" :key="index">{{ text
-          }}</p>
+        <div class="message-container">
+          <div class="message-item" v-for="(text, index) in pcmStore.result" :key="index">
+            <div class="username-box">
+              <span class="username">
+                {{ text.includes(':') ? text.split(':')[0] + ':' : '' }}
+              </span>
+            </div>
+            <div class="content-box">
+              <span>{{ text.includes(':') ? text.split(':').slice(1).join(':') : text }}</span>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="ai-voice-info">
         <div style="display: flex; justify-content: space-between;">
@@ -107,6 +117,34 @@ onUnmounted(stopFetching);
     border-right: 1px solid #b7b5b5;
     overflow: auto;
     padding: 5px 20px;
+
+    .message-container {
+      width: 100%;
+    }
+
+    .message-item {
+      display: flex;
+      margin-bottom: 5px;
+      line-height: 1.8;
+    }
+
+    .username-box {
+      width: 80px;
+      text-align: right;
+      padding-right: 10px;
+      box-sizing: border-box;
+    }
+
+    .content-box {
+      flex: 1;
+      padding-left: 10px;
+      word-break: break-word;
+    }
+
+    .username {
+      color: rgb(127, 173, 238);
+      font-size: 18px;
+    }
   }
 
   .ai-voice-info {
